@@ -31,7 +31,7 @@ export default function Home() {
         </div>
 
         {/* List of the expenses */}
-        <div className='flex flex-grow flex-col gap-4 p-4 border border-red-800 w-full h-1/3 overflow-y-scroll '>
+        <div className='flex flex-grow flex-col gap-4 p-4 border border-red-800  w-full h-2/3 overflow-y-scroll pb-24 '>
           <li className='flex justify-between border-b border-gray-300 p-4'>
             <div>Education</div>
             <div>- Rs. 3000</div>
@@ -58,6 +58,26 @@ export default function Home() {
           </li>
           <li className='flex justify-between border-b border-gray-300 p-4'>
             <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Health</div>
             <div>- Rs. 3000</div>
           </li>
 
@@ -65,7 +85,7 @@ export default function Home() {
 
 
         {/* footer section */}
-        <footer className='z-50 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-between absolute left-0 bottom-0 w-full'>
+        <footer className='z-50  bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-between absolute left-0 bottom-0 w-full'>
           <div className='bg-orange-200  p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </div>
