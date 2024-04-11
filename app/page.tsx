@@ -9,9 +9,9 @@ export default function Home() {
   return (
     <>
 
-      <main className="container mx-auto border border-blue-200 h-screen w-full">
+      <main className="container border border-blue-200 h-screen w-full">
         {/* header */}
-        <header className='h-16 flex align-center justify-between rounded-xl w-full p-2 border border-blue-500'>
+        <header className='h-16  flex align-center shadow-orange-700/10 shadow-lg justify-between rounded-xl w-full p-4 '>
           <span className='my-auto'><ThemeSwitcher /></span>
           <p className='font-medium text-lg hover:underline my-auto'>Your Expenses</p>
           <button className="Btn my-auto">
@@ -23,28 +23,58 @@ export default function Home() {
         </header>
 
         {/* Total Expense Viewer */}
-        <div className='h-72 w-4/5 border border-red-400 mx-auto my-4 '>
-          <div className='flex align-center justify-center relative mt-24'>
+        <div className='h-48 w-full border border-red-400 mx-auto my-4 '>
+          <div className='flex align-center justify-center relative m-14'>
             <span className='text-2xl text-red-600  mb-14 my-auto'>Rs. </span>
             <div className='text-7xl font-bold  p-4'>550</div>
           </div>
         </div>
 
         {/* List of the expenses */}
-        {/* --------to do ------------------- */}
+        <div className='flex flex-grow flex-col gap-4 p-4 border border-red-800 w-full h-1/3 overflow-y-scroll '>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+          <li className='flex justify-between border-b border-gray-300 p-4'>
+            <div>Education</div>
+            <div>- Rs. 3000</div>
+          </li>
+
+        </div>
 
 
         {/* footer section */}
-        <footer className='flex border dark:border-gray-100 p-4 justify-between absolute bottom-0 w-full'>
-          <div className='bg-white p-2 my-auto rounded-full dark:bg-indigo-700'>
-            <Image src={'/bar-chart.png'} width={30} height={30} alt='analytics'></Image>
+        <footer className='z-50 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-between absolute left-0 bottom-0 w-full'>
+          <div className='bg-orange-200  p-2 my-auto rounded-full dark:bg-orange-400'>
+            <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </div>
           <button className="button my-auto">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
             <span className="lable">Add</span>
           </button>
-          <div className='bg-white p-2 my-auto rounded-full'>
-            <Image src={'/user.png'} width={30} height={30} alt='user'></Image>
+          <div className='bg-orange-200 p-2 my-auto rounded-full  dark:bg-orange-400'>
+            <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
           </div>
         </footer>
       </main>
