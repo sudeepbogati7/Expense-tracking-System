@@ -6,6 +6,11 @@ import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 
 export default function Home() {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsPopupOpen((prevState) => !prevState);
+  };
   return (
     <>
       <main className="container border border-blue-200 h-screen w-full">
@@ -23,9 +28,9 @@ export default function Home() {
 
         {/* Total Expense Viewer */}
         <div className='flex flex-col border-b-4 border-gray-200 dark:border-gray-600  h-38 w-full mx-auto '>
-          <div className='text-xs w-full text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-red-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-red-500'>" </span></div>
+          <div className='text-xs w-full text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
           <div className='flex justify-center align-center'>
-            <span className='text-2xl text-red-600  mb-14 my-auto'>Rs. </span>
+            <span className='text-2xl text-orange-600  mb-14 my-auto'>Rs. </span>
             <div className='text-7xl font-bold  p-4'>550</div>
           </div>
           <span className='py-4 text-center align-center tracking-widest text-gray-500'>12 April, 2024</span>
@@ -34,45 +39,54 @@ export default function Home() {
         {/* List of the expenses */}
         <div className='shadow-gray-500/10 shadow-xl text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-evenly px-6 py-4  '>
           <span>This Month's total </span>
-          <div> <span className='text-red-500'> Rs. </span>5000</div>
+          <div> <span className='text-orange-500'> Rs. </span>5000</div>
         </div>
         <div className='flex flex-col gap-4 w-full h-2/4 overflow-y-scroll '>
           <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-red-500'>Rs. </span>3000</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+
         </div>
 
-
+        <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
         {/* footer section */}
         <footer className='z-50 h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around absolute left-0 bottom-0 w-full'>
           <div className='bg-orange-200  p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </div>
-          <button className="button my-auto">
+          <button
+            className="button my-auto"
+            onClick={togglePopup}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
             <span className="lable">Add</span>
           </button>
+
           <div className='bg-orange-200 p-2 my-auto rounded-full  dark:bg-orange-400'>
             <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
           </div>
@@ -80,4 +94,51 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+
+const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed bottom-24 bg-orange-100 rounded-xl shadow-xl w-3/4 h-auto mx-14 p-4">
+      <div className="flex items-center gap-4">
+        <span className="shrink-0 rounded-full bg-emerald-400 p-2 text-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            className="h-4 w-4">
+            <path
+              fill-rule="evenodd"
+              d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </span>
+
+        <p className="font-medium sm:text-lg text-emerald-600">New notification!</p>
+      </div>
+
+      <p className="mt-4 text-gray-600">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore?
+      </p>
+
+      <div className="mt-6 sm:flex sm:gap-4">
+        <a
+          href="#"
+          className="inline-block w-full rounded-lg bg-emerald-500 px-5 py-3 text-center text-sm font-semibold text-white sm:w-auto"
+        >
+          View
+        </a>
+
+        <a
+          href="#"
+          className="mt-2 inline-block w-full rounded-lg bg-stone-300 px-5 py-3 text-center text-sm font-semibold text-gray-800 sm:mt-0 sm:w-auto"
+        >
+          Dismiss
+        </a>
+      </div>
+    </div>
+  )
 }
