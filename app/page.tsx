@@ -50,27 +50,6 @@ export default function Home() {
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
             <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
-          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
-            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
-          </li>
-          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
-            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
-          </li>
-          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
-            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
-          </li>
-          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
-            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
-          </li>
-          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
-            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
-            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
-          </li>
-
         </div>
 
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
