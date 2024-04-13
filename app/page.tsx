@@ -172,7 +172,7 @@ export function SideBar({ open, setOpen }: any) {
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                         </svg>
                       </div>
-                      <div className='pt-2 font-medium text-lg tracking-wide'>Sudeep Bogati</div>
+                      <div className='pt-2 font-bold text-lg tracking-wide'>Sudeep Bogati</div>
                       <span className='text-xs p-1 italic '>hello@sudipbogati.com</span>
                       <div className='text-xs tracking-wide p-2'>Joined on : 13 April, 2024</div>
                     </div>

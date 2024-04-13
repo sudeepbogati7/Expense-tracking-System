@@ -1,7 +1,7 @@
 /* for all social containers*/
 .socialContainer {
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: rgb(44, 44, 44);
   display: flex;
