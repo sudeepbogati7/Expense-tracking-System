@@ -1,4 +1,5 @@
 'use client';
+
 import './page.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
@@ -8,7 +9,7 @@ import Link from 'next/link';
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-
+import 'tailwindcss/tailwind.css';
 
 
 export default function Home() {
@@ -69,14 +70,50 @@ export default function Home() {
             <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
             <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
           </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
+          <li className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'>
+            <div className='font-bold text-base'> <span className='text-xl mr-2'> 🍔 </span>  Education</div>
+            <div className='text-lg'>- <span className='text-red-500 dark:text-orange-500'>Rs. </span>3000</div>
+          </li>
         </div>
 
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
         {/* footer section */}
-        <footer className='z-50 h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around absolute left-0 bottom-0 w-full'>
-          <div className='bg-orange-200  p-2 my-auto rounded-full dark:bg-orange-400'>
+        <footer className='h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around absolute left-0 bottom-0 w-full'>
+          <Link href={'/dashboard'} className='bg-orange-200 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
-          </div>
+          </Link>
           <button
             className="button my-auto"
             onClick={togglePopup}
@@ -87,7 +124,7 @@ export default function Home() {
           <SideBar open={open} setOpen={setOpen} />
           <button
             onClick={toggleSideBar}
-            className='bg-orange-200 p-2 my-auto rounded-full  dark:bg-orange-400'>
+            className='bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 duration-200 transition-all  dark:bg-orange-400'>
             <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
           </button>
         </footer>
@@ -148,7 +185,7 @@ export function SideBar({ open, setOpen }: any) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="absolute left-16 top-0 -ml-0 flex pr-0 pt-4 sm:-ml-10 sm:pr-4">
+                    <div className="absolute left-14 top-0 -ml-0 flex pr-0 pt-4 sm:-ml-10 sm:pr-4">
                       <button
                         type="button"
                         className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
@@ -175,6 +212,12 @@ export function SideBar({ open, setOpen }: any) {
                       <div className='pt-2 font-bold text-lg tracking-wide'>Sudeep Bogati</div>
                       <span className='text-xs p-1 italic '>hello@sudipbogati.com</span>
                       <div className='text-xs tracking-wide p-2'>Joined on : 13 April, 2024</div>
+                    </div>
+                    <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
+                      <span className='border-b border-gray-200 w-fit mx-auto'>Developed by Sudeep Bogati</span>
+                      <Link href={'/about-me'} className=' hover:underline w-fit'>About me </Link>
+                      <span>hello@sudipbogati.com.np</span>
+                      <span>+977-98*******</span>
                     </div>
                   </div>
                 </Dialog.Panel>

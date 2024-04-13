@@ -6,7 +6,7 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Expense Tracker || Register ",
+    title: "Register || Expense Tracker",
     description: "Expense Tracker, by sudeepbogati7s",
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${inter.className} bg-slate-50 dark:bg-[#0d1117] `}
+                className={`${inter.className} bg-gray-100 dark:bg-[#0d1117] `}
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                     <main>{children}</main>
