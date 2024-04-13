@@ -1,6 +1,6 @@
 'use client';
 'use client';
-import './login.css';
+import '../login/login.css';
 import '../page.css';
 import 'tailwindcss/tailwind.css';
 import Image from 'next/image';
@@ -21,30 +21,39 @@ export default function Login() {
             </header>
             <main>
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
-                    <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Login </span> Your Identity</span>
+                    <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form action="" className='flex flex-col p-6 justify-center mx-auto w-full'>
-                        <div className='flex flex-col w-full p-4'>
+                        <div className='flex flex-col w-full px-4 py-2'>
+                            <label className='mx-2 font-medium tracking-wide' htmlFor="email">Full Name </label>
+                            <input
+                                type="email"
+                                name='email'
+                                placeholder='sudeep@example.com'
+                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
+                            />
+                        </div>
+                        <div className='flex flex-col w-full px-4 py-2'>
                             <label className='mx-2 font-medium tracking-wide' htmlFor="email">Email</label>
                             <input
                                 type="email"
                                 name='email'
                                 placeholder='sudeep@example.com'
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none'
+                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                             />
                         </div>
-                        <div className='w-full px-4'>
+                        <div className='w-full px-4 py-2'>
                             <label className='tracking-wide mx-2 font-medium' htmlFor="password">Password</label>
                             <input
                                 type="password"
                                 name="password"
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none'
+                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                                 placeholder='********' />
                         </div>
                         <div className='px-4'>
                             <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full  mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
                         </div>
 
-                        <div className='mx-auto my-4 text-base'>Don't have an account ? <Link href={'/register'}> <span className='text-orange-600 border-b border-orange-400'> Register </span> </Link></div>
+                        <div className='mx-auto my-4 text-base'>Already have an account? <Link href={'/login'}> <span className='text-orange-600 border-b border-orange-400'> Login  </span> </Link></div>
                     </form>
                 </div>
             </main>
