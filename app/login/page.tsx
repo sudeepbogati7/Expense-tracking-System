@@ -1,5 +1,4 @@
 'use client';
-'use client';
 import './login.css';
 import '../page.css';
 import 'tailwindcss/tailwind.css';
