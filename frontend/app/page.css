@@ -218,6 +218,17 @@
   }
 }
 
+ 
+/* Scroll bar color and size  */
+::-webkit-scrollbar {
+  width: 5px;
+}
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 166, 0, 0.782);
+  border-radius: 6px;
+}

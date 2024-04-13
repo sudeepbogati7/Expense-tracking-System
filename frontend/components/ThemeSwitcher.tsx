@@ -23,7 +23,7 @@ export const ThemeSwitcher = () => {
         <label className="ui-switch">
             <input
                 type="checkbox"
-                checked={theme === 'light'}
+                checked={theme === 'dark'}
                 onChange={toggleTheme}
             />
             <div className="slider">
