@@ -1,44 +1,52 @@
-import { Model, DataTypes, Sequelize } from 'sequelize';
-import sequelize from '../index';
+import { Table, Column, Model, DataType, BeforeCreate } from 'sequelize-typescript';
+import * as bcrypt from 'bcrypt';
 
+@Table({
+    tableName: 'users',
+    timestamps: true,
+})
 
-class User extends Model {
-    public id!: number;
-    public fullName!: string;
-    public email!: string;
-    public password !: string;
-    public readonly createdAt!: Date;
-}
-User.init({
-    id: {
-        type: DataTypes.INTEGER,
+export class User extends Model<User> {
+    @Column({
+        type: DataType.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-    },
-    fullName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
+
+    })
+    id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        unique: true,
+        validate: {
+            isAlphanumeric: true,
+            len: [3, 25],
+        },
+    })
+    fullName!: string;
+
+    @Column({
+        type: DataType.STRING,
         unique: true,
         validate: {
             isEmail: true,
         },
-        allowNull: false,
-    },
-    password: {
-        type: DataTypes.STRING,
-        validate: {
-            isAlphanumeric: true,
-        },
-        allowNull: false,
-    }
-},
-    {
-        sequelize,
-        modelName: 'User'
-    }
-);
+    })
+    email!: string;
 
-export default User;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    password !: string;
+
+    @BeforeCreate
+    static async hashPassword(instance: User): Promise<void> {
+        if (instance.changed('password')) {
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(instance.password, saltRounds);
+            instance.password = hashedPassword;
+        }
+    }
+}

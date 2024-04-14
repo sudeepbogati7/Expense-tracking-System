@@ -1,28 +1,23 @@
-import { Sequelize } from "sequelize-typescript";
+import sequelize from "./config/sequelize";
+import Express from 'express';
+import bodyParser from "body-parser";
+const app = Express();
+const PORT = process.env.PORT || 3001;
 
-import pg from 'pg';
-import User from "./models/user";
+// middlewares
+app.use(bodyParser.json());
+app.use(Express.json());
 
-const sequelize = new Sequelize({
-    username: 'postgres',
-    password: 'sudeep',
-    database: 'expense-tracker',
-    port: 5432,
-    host: 'localhost',
-    dialect: 'postgres',
-    logging: console.log,
-    dialectModule: pg
-})
-async function synchronizeModels() {
-    try {
-        await User.sync({ force: true }); // Sync the User model
-        console.log('User table created successfully.');
-        // Add sync calls for other models if you have them
-    } catch (error) {
-        console.error('Error syncing models:', error);
-    }
-}
 
-// Call the function to sync the models
-synchronizeModels();
-export default sequelize;
+// database synchronization
+sequelize.sync()
+    .then(() => {
+        console.log("Synchronized successfull..............")
+        app.listen(PORT, () => {
+            console.log("Server is running on port %d", PORT);
+        })
+    })
+
+    .catch(err => {
+        console.log("Failed to sync to database : ", err);
+    });
