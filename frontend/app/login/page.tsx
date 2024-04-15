@@ -7,14 +7,15 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
+import Header from '@/components/Header';
 
 export default function Login() {
     return (
         <div className='h-screen w-full'>
-            <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 border dark:border-gray-600'>
+            <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                 <span className='my-auto'><ThemeSwitcher /></span>
                 <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>
-                <Link href={'/about-me'} className='border px-3 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
+                <Link href={'/about-me'} className='text-center my-auto border px-2 py-0 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
                     About
                 </Link>
             </header>
@@ -28,7 +29,7 @@ export default function Login() {
                                 type="email"
                                 name='email'
                                 placeholder='sudeep@example.com'
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none'
+                                className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
                             />
                         </div>
                         <div className='w-full px-4'>
@@ -36,18 +37,18 @@ export default function Login() {
                             <input
                                 type="password"
                                 name="password"
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none'
+                                className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
                                 placeholder='********' />
                         </div>
                         <div className='px-4'>
-                            <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full  mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
+                            <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full dark:shadow-lg dark:shadow-orange-600/40 mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
                         </div>
 
                         <div className='mx-auto my-4 text-base'>Don't have an account ? <Link href={'/register'}> <span className='text-orange-600 border-b border-orange-400'> Register </span> </Link></div>
                     </form>
                 </div>
             </main>
-            <footer className='flex absolute items-center flex-col bottom-0 border-t-2 border-gray-300 dark:border-gray-600 w-full h-24 bg-gray-200 dark:bg-gray-800'>
+            <footer className='flex fixed items-center flex-col bottom-0 border-t-2 border-gray-300 dark:border-gray-600 w-full h-24 bg-gray-200 dark:bg-gray-800'>
                 <div className='p-2 text-lg font-medium text-gray-600 dark:text-gray-400'>Connect with me </div>
                 <div className=" flex gap-8 items-center justify-center w-full">
                     <Link className="socialContainer containerOne " href="https://instagram.com/the.sudeep_">

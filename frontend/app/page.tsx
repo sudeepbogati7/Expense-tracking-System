@@ -13,9 +13,28 @@ import 'tailwindcss/tailwind.css';
 
 // components
 import Header from '@/components/Header';
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
+
+
+  const useAuthentication = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, "$1");
+      if (!token) {
+        router.push('/register');
+      }
+    }, []);
+
+    return null; // You can return any value or component here if needed
+  };
+
+
+
+  useAuthentication();
   // date
   const getCurrentDate = () => {
     const currentDate = new Date();
