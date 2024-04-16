@@ -11,29 +11,6 @@ import Link from 'next/link';
 
 
 export default function Login() {
-    const [formData, setFormData] = useState({
-        fullName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
-    const [passwordMatch, setPasswordMatch] = useState(true);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Add form submission logic here
-        console.log("-----------------------------------------------------------------", formData);
-    };
-
-    // Check if password and confirm password match
-    const validatePassword = () => {
-        setPasswordMatch(formData.password === formData.confirmPassword);
-    };
 
 
     return (
@@ -50,15 +27,12 @@ export default function Login() {
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form
                         className='flex flex-col p-6 justify-center mx-auto w-full'
-                        onSubmit={handleSubmit}
                     >
                         <div className='flex flex-col w-full px-4 py-2'>
                             <label className='mx-2 font-medium tracking-wide' htmlFor="email">Full Name </label>
                             <input
                                 type="text"
                                 name='fullName'
-                                onChange={handleChange}
-                                value={formData.fullName}
                                 placeholder='Salman Khan'
                                 required
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
@@ -70,19 +44,15 @@ export default function Login() {
                                 type="email"
                                 name='email'
                                 placeholder='salman.khan@example.com'
-                                onChange={handleChange}
-                                value={formData.email}
                                 required
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                             />
                         </div>
                         <div className='w-full px-4 py-2'>
-                            <label className='tracking-wide mx-2 font-medium' htmlFor="password">Password</label>
+                            <label className='tracking-wide mx-2 font-medium' >Password</label>
                             <input
                                 type="password"
                                 name="password"
-                                onChange={(e) => { handleChange(e); validatePassword(); }}
-                                value={formData.password}
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                                 required
                                 placeholder='********'
@@ -90,13 +60,11 @@ export default function Login() {
 
                         </div>
                         <div className='w-full px-4 py-2'>
-                            <label className='tracking-wide mx-2 font-medium' htmlFor="password">Confirm password</label>
+                            <label className='tracking-wide mx-2 font-medium' htmlFor="c_password">Confirm password</label>
                             <input
                                 type="password"
-                                name="confirmPassword"
-                                onChange={(e) => { handleChange(e); validatePassword(); }}
-                                value={formData.confirmPassword}
-                                className={`${passwordMatch ? ' ' : 'border-red-500'} w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none`}
+                                name="c_password"
+                                className={` w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none`}
                                 required
                                 placeholder='********' />
                         </div>
