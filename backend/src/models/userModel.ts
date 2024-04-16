@@ -6,21 +6,19 @@ import * as bcrypt from 'bcrypt';
     timestamps: true,
 })
 
-export class User extends Model<User> {
+export class User extends Model {
     @Column({
         type: DataType.INTEGER,
         primaryKey: true,
         autoIncrement: true,
 
     })
-    id!: number;
+    userId!: number;
 
     @Column({
         type: DataType.STRING,
-        unique: true,
         validate: {
-            isAlphanumeric: true,
-            len: [3, 25],
+            len: [5, 50],
         },
     })
     fullName!: string;
@@ -34,10 +32,12 @@ export class User extends Model<User> {
     })
     email!: string;
 
-
     @Column({
         type: DataType.STRING,
         allowNull: false,
+        validate: {
+            isAlphanumeric: true
+        }
     })
     password !: string;
 

@@ -8,6 +8,12 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.json());
 app.use(Express.json());
 
+// error handling mechanisms 
+require('./utils/handleErrors')();
+// routes 
+import router from "./routes/userRoutes";
+app.use('/api/user', router);
+
 
 // database synchronization
 sequelize.sync()

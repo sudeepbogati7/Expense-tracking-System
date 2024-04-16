@@ -5,7 +5,7 @@ const { QueryInterface, DataTypes } = require('sequelize');
 module.exports = {
     up: async (queryInterface: typeof QueryInterface) => {
         await queryInterface.createTable('Users', {
-            id: {
+            userId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
@@ -13,7 +13,6 @@ module.exports = {
             },
             fullName: {
                 allowNull: false,
-                unique: true,
                 type: DataTypes.STRING(25),
             },
             email: {

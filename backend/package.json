@@ -15,8 +15,13 @@
     "@types/pg": "^8.11.5",
     "@types/sequelize": "^4.28.20",
     "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "joi": "^17.12.3",
+    "jsonwebtoken": "^9.0.2",
+    "latest": "^0.2.0",
+    "lodash": "^4.17.21",
     "nodemon": "^3.1.0",
     "pg": "^8.11.5",
     "sequelize": "^6.37.2",
@@ -26,6 +31,8 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
     "eslint": "^9.0.0"
   }
 }
