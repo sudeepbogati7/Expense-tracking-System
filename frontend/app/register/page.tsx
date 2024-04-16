@@ -22,11 +22,12 @@ export default function Register() {
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/');
 
+    const [responseData, setResponseData] = useState(null);
+
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
-
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
@@ -40,8 +41,9 @@ export default function Register() {
             if (!response.ok) {
                 throw new Error('Registration failed');
             }
-            const responseData = await response.json();
-            localStorage.setItem('token', responseData.token)
+            const data = await response.json();
+            localStorage.setItem('token', data.token)
+            setResponseData(data);
             router.push('/login');
         } catch (error) {
             console.error('Registration error:', error);
