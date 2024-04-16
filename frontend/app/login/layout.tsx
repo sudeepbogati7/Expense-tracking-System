@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from '../theme-provider';
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
     title: "Login || Expense Tracker ",
     description: "Expense Tracker, by sudeepbogati7s",
 };
+import { ResponseDataProvider } from '@/components/ResponseDataContext';
 
 
 export default function RootLayout({
@@ -21,7 +23,9 @@ export default function RootLayout({
                 className={`${inter.className} bg-gray-200 dark:bg-[#0d1117] `}
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    <main>{children}</main>
+                    <ResponseDataProvider>
+                        <main>{children}</main>
+                    </ResponseDataProvider>
                 </ThemeProvider>
             </body>
         </html>

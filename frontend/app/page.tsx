@@ -10,7 +10,7 @@ import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import 'tailwindcss/tailwind.css';
-
+import { useResponseData } from '@/components/ResponseDataContext';
 // components
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
@@ -146,7 +146,8 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
 
 //slide bar
 export function SideBar({ open, setOpen }: any) {
-
+  const { responseData, setResponseData } = useResponseData();
+  console.log("response data from slide bar ", responseData)
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -208,9 +209,9 @@ export function SideBar({ open, setOpen }: any) {
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                         </svg>
                       </div>
-                      <div className='pt-2 font-bold text-lg tracking-wide'>Sudeep Bogati</div>
-                      <span className='text-xs p-1 italic '>hello@sudipbogati.com</span>
-                      <div className='text-xs tracking-wide p-2'>Joined on : 13 April, 2024</div>
+                      <div className='pt-2 font-bold text-lg tracking-wide'>{responseData ? responseData.user.fullName : "NO DATA"}</div>
+                      <span className='text-xs p-1 italic '>{responseData ? responseData.user.email : "nodata@user.com"}</span>
+                      <div className='text-xs tracking-wide p-2'>Joined on : {responseData ? responseData.user.createdAt : "no-data-found"}</div>
                     </div>
                     <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
                       <span className='border-b border-gray-200 w-fit mx-auto'>Developed by Sudeep Bogati</span>

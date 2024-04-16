@@ -9,13 +9,14 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
+import { useResponseData } from '@/components/ResponseDataContext';
 
 export default function Login() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
-
+    const { setResponseData } = useResponseData();
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/')
 
@@ -37,8 +38,11 @@ export default function Login() {
             if (!response.ok) {
                 throw new Error('Registration failed');
             }
-            const responseData = await response.json();
-            localStorage.setItem('token', responseData.token)
+            const data = await response.json();
+            localStorage.setItem('token', data.token)
+
+            setResponseData(data);
+
             router.push('/');
         } catch (error) {
             alert('Registration error:');

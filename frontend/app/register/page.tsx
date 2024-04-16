@@ -9,9 +9,9 @@ import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import { useResponseData } from '@/components/ResponseDataContext';
 export default function Register() {
-
+    const { responseData, setResponseData } = useResponseData();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -22,7 +22,7 @@ export default function Register() {
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/');
 
-    const [responseData, setResponseData] = useState(null);
+    console.log("Response data ---------------------->> ", responseData)
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;

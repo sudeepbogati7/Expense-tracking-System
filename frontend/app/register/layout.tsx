@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: "Expense Tracker, by sudeepbogati7s",
 };
 
-
+import { ResponseDataProvider } from "@/components/ResponseDataContext";
 export default function RootLayout({
     children,
 }: {
@@ -22,7 +22,9 @@ export default function RootLayout({
                 className={`${inter.className} bg-gray-100 dark:bg-[#0d1117] `}
             >
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                    <main>{children}</main>
+                    <ResponseDataProvider>
+                        <main>{children}</main>
+                    </ResponseDataProvider>
                 </ThemeProvider>
             </body>
         </html>
