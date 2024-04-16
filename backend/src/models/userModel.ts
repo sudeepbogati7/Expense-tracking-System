@@ -35,18 +35,22 @@ export class User extends Model {
     @Column({
         type: DataType.STRING,
         allowNull: false,
-        validate: {
-            isAlphanumeric: true
-        }
     })
     password !: string;
 
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    confirmPassword?: string;
+
     @BeforeCreate
-    static async hashPassword(instance: User): Promise<void> {
+    static async hashPasswordAndRemoveConfirmPassword(instance: User): Promise<void> {
         if (instance.changed('password')) {
             const saltRounds = 10;
             const hashedPassword = await bcrypt.hash(instance.password, saltRounds);
             instance.password = hashedPassword;
         }
+        delete instance.confirmPassword;
     }
-}
+}   

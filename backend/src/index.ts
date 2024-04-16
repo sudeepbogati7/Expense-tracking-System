@@ -3,11 +3,13 @@ import Express from 'express';
 import bodyParser from "body-parser";
 const app = Express();
 const PORT = process.env.PORT || 3001;
-
+import cors from 'cors';
 // middlewares
 app.use(bodyParser.json());
 app.use(Express.json());
-
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 // error handling mechanisms 
 require('./utils/handleErrors')();
 // routes 
