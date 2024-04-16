@@ -8,8 +8,43 @@ import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import Header from '@/components/Header';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    const router = useRouter();
+    if (localStorage.getItem('token')) router.push('/')
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/api/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error('Registration failed');
+            }
+            const responseData = await response.json();
+            localStorage.setItem('token', responseData.token)
+            router.push('/');
+        } catch (error) {
+            alert('Registration error:');
+        }
+    };
+
     return (
         <div className='h-screen w-full'>
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
@@ -22,12 +57,16 @@ export default function Login() {
             <main>
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Login </span> Your Identity</span>
-                    <form action="" className='flex flex-col p-6 justify-center mx-auto w-full'>
+                    <form
+                        onSubmit={handleSubmit}
+                        className='flex flex-col p-6 justify-center mx-auto w-full'>
                         <div className='flex flex-col w-full p-4'>
                             <label className='mx-2 font-medium tracking-wide' htmlFor="email">Email</label>
                             <input
                                 type="email"
                                 name='email'
+                                value={formData.email}
+                                onChange={handleChange}
                                 placeholder='sudeep@example.com'
                                 className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
                             />
@@ -37,6 +76,8 @@ export default function Login() {
                             <input
                                 type="password"
                                 name="password"
+                                value={formData.password}
+                                onChange={handleChange}
                                 className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
                                 placeholder='********' />
                         </div>

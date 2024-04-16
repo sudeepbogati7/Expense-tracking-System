@@ -8,10 +8,45 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
+export default function Register() {
 
-export default function Login() {
+    const [formData, setFormData] = useState({
+        fullName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
+    const router = useRouter();
+    if (localStorage.getItem('token')) router.push('/');
+
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/api/user/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error('Registration failed');
+            }
+            const responseData = await response.json();
+            localStorage.setItem('token', responseData.token)
+            router.push('/login');
+        } catch (error) {
+            console.error('Registration error:', error);
+        }
+    };
 
     return (
         <div className='h-screen w-full'>
@@ -26,6 +61,7 @@ export default function Login() {
                 <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form
+                        onSubmit={handleSubmit}
                         className='flex flex-col p-6 justify-center mx-auto w-full'
                     >
                         <div className='flex flex-col w-full px-4 py-2'>
@@ -34,6 +70,8 @@ export default function Login() {
                                 type="text"
                                 name='fullName'
                                 placeholder='Salman Khan'
+                                value={formData.fullName}
+                                onChange={handleChange}
                                 required
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                             />
@@ -43,6 +81,8 @@ export default function Login() {
                             <input
                                 type="email"
                                 name='email'
+                                value={formData.email}
+                                onChange={handleChange}
                                 placeholder='salman.khan@example.com'
                                 required
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
@@ -53,6 +93,8 @@ export default function Login() {
                             <input
                                 type="password"
                                 name="password"
+                                value={formData.password}
+                                onChange={handleChange}
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                                 required
                                 placeholder='********'
@@ -60,10 +102,12 @@ export default function Login() {
 
                         </div>
                         <div className='w-full px-4 py-2'>
-                            <label className='tracking-wide mx-2 font-medium' htmlFor="c_password">Confirm password</label>
+                            <label className='tracking-wide mx-2 font-medium' htmlFor="confirmPassword">Confirm password</label>
                             <input
                                 type="password"
-                                name="c_password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
                                 className={` w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none`}
                                 required
                                 placeholder='********' />
