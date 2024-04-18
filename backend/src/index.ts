@@ -4,6 +4,9 @@ import bodyParser from "body-parser";
 const app = Express();
 const PORT = process.env.PORT || 3001;
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
+
 // middlewares
 app.use(bodyParser.json());
 app.use(Express.json());
@@ -11,21 +14,19 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
-// const sessionKey: string = process.env.SESSION_SECRET;
-// express session 
-import session from 'express-session';
-app.use(session({
-    secret: 'sessionKey',
-    resave: false,
-    saveUninitialized: false
-}));
+app.use(cookieParser());
+
 
 // error handling mechanisms 
 require('./utils/handleErrors')();
+
+
 // routes 
 import router from "./routes/userRoutes";
 app.use('/api/user', router);
 
+
+// env variables check 
 require('./utils/envVariables')();
 // database synchronization
 sequelize.sync()

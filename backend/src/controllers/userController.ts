@@ -27,32 +27,17 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
 
 
-        const userData = { fullName, email, password, otp };
+        const userData = { fullName, email, password };
         // save OTP in node-cache
         otpCache.set(email, otp);
         userCache.set(email, userData);
 
-        // saving the email in session 
-        req.session.email = email;
+        res.cookie('user_email', email, { httpOnly: true });
 
         // send OTP mail , configured in @utils/sendMail.ts
         otpMailAfterRegister(email, fullName, res, otp);
 
-        const newUser = await User.create({
-            fullName,
-            email,
-            password
-        });
-        // jwt token 
-        // const token = genAuthToken(newUser);
-        // const token = genAuthToken(newUser);
-        // const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
 
-        // res.status(201).json({
-        //     message: "Successfully registered new user ",
-        //     user: userWithoutPassword,
-        //     token: token
-        // });
     } catch (error) {
         res.status(500).json({
             error: "Internal Server Error :(",
@@ -62,11 +47,60 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
 };
 
 
-const registerUserAfterOTPVerification = (req: Request, res: Response) => {
+const registerUserAfterOTPVerification = async (req: Request, res: Response) => {
     try {
-        const email = req.session.email;
+        const email = req.cookies.user_email;
+        if (!email) {
+            return res.status(400).json({
+                error: "Email not found ! Please complete the initial registration first ."
+            });
+        }
+        const { otp } = req.body;
+
+        const userData: any = userCache.get(email);
+        const cachedOTP = otpCache.get(email);
+
+        console.log("Userdata from cache ; ===============> ", userData);
+
+        if (!userData || !cachedOTP) {
+            return res.status(400).json({ error: "User data or OTP not found. Please request OTP again." });
+        }
+
+        console.log("cached OTP : ==> ", cachedOTP, "typeof cached otp : ", typeof (cachedOTP));
+        console.log("OTP entered by the user : ", otp, "typeof user otp: ", typeof (otp));
+
+        // Verify OTP
+        if (cachedOTP == otp) {
+            const newUser = await User.create({
+                fullName: userData.fullName,
+                email: userData.email,
+                password: userData.password
+            });
+            // Generate JWT token
+            const token = genAuthToken(newUser);
+            console.log("TOken generated :", token);
+            // Omit password from user object
+            const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
+            console.log("User without password : ", userWithoutPassword);
+            // Remove user data from cache after registration & email cookie from cookies
+            res.status(201).json({
+                message: "User registration successful.",
+                user: userWithoutPassword,
+                token: token
+            });
+        } else {
+            return res.status(401).json({ error: "Invalid OTP. Please enter the correct OTP." });
+        }
+
+
+
+        // Clear OTP from cache after successful verification
+        // otpCache.del(email);
+        // userCache.del(email);
+        // res.clearCookie('user_email');
 
     } catch (err) {
+        console.log("actual error ------------------->>>>>>>>>>>>>>>", err)
         res.status(500).json({ error: "Internal Server Error :( , Please try again later. " });
     }
 };
@@ -98,4 +132,4 @@ const logoutUser = async (req: Request, res: Response) => {
     }
 }
 
-export { loginUser, sendOTPAndCacheUserData, logoutUser };
+export { loginUser, sendOTPAndCacheUserData, registerUserAfterOTPVerification, logoutUser };
