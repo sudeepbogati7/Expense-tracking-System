@@ -19,12 +19,15 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
     "latest": "^0.2.0",
     "lodash": "^4.17.21",
+    "node-cache": "^5.1.2",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
+    "otp-generator": "^4.0.1",
     "pg": "^8.11.5",
     "sequelize": "^6.37.2",
     "sequelize-cli": "^6.6.2",
@@ -35,8 +38,10 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
+    "@types/express-session": "^1.18.0",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/nodemailer": "^6.4.14",
+    "@types/otp-generator": "^4.0.2",
     "eslint": "^9.0.0"
   }
 }

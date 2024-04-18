@@ -13,20 +13,22 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const mailAfterRegister = (email: string, name: string, res: Response) => {
+export const otpMailAfterRegister = (email: string, name: string, res: Response, otp: string) => {
     const mailOptions = {
         from: process.env.EMAIL_NAME,
         to: email,
         subject: 'Verify OPT for registration ',
         html: `
             <p>Dear ${name}</p> <br>
-            <p>Please verify the OTP for registration.</p>
+            <p>Please verify the OTP for registration.</p><br>
+            <p>Your OTP: <strong> ${otp} </strong> </p>
+
         `
     };
     try {
         transporter.sendMail(mailOptions)
         res.status(200).json({ message: "Please check your gmail for OTP." });
     } catch (error) {
-        res.status(500).json({ error: "Something went wrong :( , Please try again in some moment." });
+        res.status(500).json({ error: "Failed to send OTP, please try again later." });
     }
 }
