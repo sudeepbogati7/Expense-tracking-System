@@ -17,6 +17,7 @@ interface RegisterUserBody {
     confirmPassword: string;
 }
 
+// <-------------------------- Sending OTP , storing userInfo in NodeCache  ---------------------------------->
 const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
     try {
         const { fullName, email, password, confirmPassword } = req.body;
@@ -48,7 +49,7 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
     }
 };
 
-
+// <-------------------------- Register user if OTP is corrent and valid  ---------------------------------->
 const registerUserAfterOTPVerification = async (req: Request, res: Response) => {
     try {
         const email = req.cookies.user_email;
@@ -61,44 +62,49 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
 
         const userData: any = userCache.get(email);
         const cachedOTP = otpCache.get(email);
-
-        console.log("Userdata from cache ; ===============> ", userData);
-
         if (!userData || !cachedOTP) {
             return res.status(400).json({ error: "User data or OTP not found. Please request OTP again." });
         }
-
-        console.log("cached OTP : ==> ", cachedOTP, "typeof cached otp : ", typeof (cachedOTP));
-        console.log("OTP entered by the user : ", otp, "typeof user otp: ", typeof (otp));
-
         // Verify OTP
         if (cachedOTP == otp) {
-            const newUser = await User.create({
-                fullName: userData.fullName,
-                email: userData.email,
-                password: userData.password
-            });
-            // Generate JWT token
-            const token = genAuthToken(newUser);
-            console.log("TOken generated :", token);
-            // Omit password from user object
-            const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
-            console.log("User without password : ", userWithoutPassword);
-            // Remove user data from cache after registration & email cookie from cookies
-            res.status(201).json({
-                message: "User registration successful.",
-                user: userWithoutPassword,
-                token: token
-            });
+            try {
+
+                const newUser = await User.create({
+                    fullName: userData.fullName,
+                    email: userData.email,
+                    password: userData.password
+                });
+                // Generate JWT token
+                const token = genAuthToken(newUser);
+                // Omit password from user object
+                const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
+                // Remove user data from cache after registration & email cookie from cookies
+                res.status(201).json({
+                    message: "User registration successful.",
+                    user: userWithoutPassword,
+                    token: token
+                });
+
+                // sending token through cookies as well 
+                const expirationDate = new Date();
+                expirationDate.setDate(expirationDate.getDate() + 30);
+                res.cookie("token", token, { secure: true, httpOnly: true, expires: expirationDate })
+            } catch (error) {
+                res.status(500).json({ error: "Opps , something went wrong. Please try again later" });
+                console.log("Error while saving into database :", error);
+            }
         } else {
             return res.status(401).json({ error: "Invalid OTP. Please enter the correct OTP." });
         }
+        userCache.del(email);
+        otpCache.del(email);
+        res.clearCookie('user_email');
     } catch (err) {
-        console.log("actual error ------------------->>>>>>>>>>>>>>>", err)
         res.status(500).json({ error: "Internal Server Error :( , Please try again later. " });
     }
 };
 
+// <-------------------------- Login  ---------------------------------->
 const loginUser = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
@@ -113,6 +119,9 @@ const loginUser = async (req: Request, res: Response) => {
                 user: userWithoutPassword,
                 token: token
             })
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 30);
+            res.cookie("token", token, { secure: true, httpOnly: true, expires: expirationDate })
         } else {
             res.status(401).json({ error: "Invalid email or password" });
         }
@@ -121,6 +130,8 @@ const loginUser = async (req: Request, res: Response) => {
     }
 }
 
+
+// <-------------------------- Logout  ---------------------------------->
 const logoutUser = async (req: Request, res: Response) => {
     try {
         res.clearCookie('token');
@@ -130,4 +141,46 @@ const logoutUser = async (req: Request, res: Response) => {
     }
 }
 
-export { loginUser, sendOTPAndCacheUserData, registerUserAfterOTPVerification, logoutUser };
+// <-------------------------- Forget Password ---------------------------------->
+import generateToken from '../utils/passwordReset';
+import { passwordResetMail } from '../utils/sendMail';
+import { string } from 'joi';
+import { isEqualsGreaterThanToken } from 'typescript';
+
+const forgetPasswordMailController = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const user = await User.findOne({ where: { email } });
+    const resetToken = generateToken();
+    const resetLink = `http://localhost:3000/api/user/forgot-password/:${resetToken}`;
+
+    if (user) {
+        res.cookie('email_ref', email, { secure: true, httpOnly: true });
+        const fullName = user.fullName;
+        passwordResetMail(email, fullName, res, resetLink);
+    } else {
+        res.status(404).json({ error: "No user found with the provided email !" });
+    }
+};
+
+
+const forgetPasswordHandler = async (req: Request, res: Response) => {
+    try {
+        const email = req.cookies.email_ref;
+        const { password, confirmPassword } = req.body;
+        if (password !== confirmPassword) res.status(409).json({ error: "Passwords don't match !" });
+        const user = await User.findOne({ where: { email } });
+        if (user) {
+            user.password = confirmPassword;
+            await user.save();
+            res.status(200).json({ message: "Successfully Updated password ;) " });
+        } else {
+            res.status(401).json({ error: "Invalid email " });
+        }
+    } catch (err) {
+        res.status(500).json({
+            error: "Internal Server Error :( Please try again later."
+        });
+    }
+};
+
+export { loginUser, sendOTPAndCacheUserData, registerUserAfterOTPVerification, logoutUser, forgetPasswordMailController, forgetPasswordHandler };

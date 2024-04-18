@@ -1,4 +1,4 @@
-import { loginUser, logoutUser, registerUserAfterOTPVerification, sendOTPAndCacheUserData } from "../controllers/userController";
+import { loginUser, logoutUser, registerUserAfterOTPVerification, sendOTPAndCacheUserData, forgetPasswordMailController, forgetPasswordHandler } from "../controllers/userController";
 import Express from "express";
 import { validateUserRegistration } from "../utils/validateUserInput";
 import { validateToken } from "../utils/validateToken";
@@ -9,5 +9,7 @@ router.post('/login', loginUser); //login user
 router.post('/register', sendOTPAndCacheUserData);
 router.post('/register/verify-otp', registerUserAfterOTPVerification);
 router.post('/logout', logoutUser)
+router.post('/forget-password', forgetPasswordMailController);
+router.post('/forget-password/')
 
 export default router;

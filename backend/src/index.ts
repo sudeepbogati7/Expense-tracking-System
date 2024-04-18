@@ -15,7 +15,7 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
-\
+
 
 // error handling mechanisms 
 require('./utils/handleErrors')();
