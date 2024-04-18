@@ -16,7 +16,7 @@ require('./utils/handleErrors')();
 import router from "./routes/userRoutes";
 app.use('/api/user', router);
 
-
+require('./utils/envVariables')();
 // database synchronization
 sequelize.sync()
     .then(() => {
