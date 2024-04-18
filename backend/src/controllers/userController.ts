@@ -4,6 +4,8 @@ import genAuthToken from '../utils/generateAuthToekn';
 import * as _ from 'lodash';
 import otpGenerator from 'otp-generator'
 import { otpMailAfterRegister } from '../utils/sendMail';
+import bcrypt from 'bcrypt';
+
 import NodeCache from 'node-cache';
 const otpCache = new NodeCache();
 const userCache = new NodeCache();
@@ -91,14 +93,6 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
         } else {
             return res.status(401).json({ error: "Invalid OTP. Please enter the correct OTP." });
         }
-
-
-
-        // Clear OTP from cache after successful verification
-        // otpCache.del(email);
-        // userCache.del(email);
-        // res.clearCookie('user_email');
-
     } catch (err) {
         console.log("actual error ------------------->>>>>>>>>>>>>>>", err)
         res.status(500).json({ error: "Internal Server Error :( , Please try again later. " });
@@ -110,14 +104,18 @@ const loginUser = async (req: Request, res: Response) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ message: "No User Found ! Have you registered ?" });
-        const userWithoutPassword = _.omit(user.toJSON(), ['password']);
-        const token = genAuthToken(user);
-        res.status(200).json({
-            message: "Login Successfull !",
-            user: userWithoutPassword,
-            token: token
-
-        })
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (isPasswordValid) {
+            const userWithoutPassword = _.omit(user.toJSON(), ['password']);
+            const token = genAuthToken(user);
+            res.status(200).json({
+                message: "Login Successfull !",
+                user: userWithoutPassword,
+                token: token
+            })
+        } else {
+            res.status(401).json({ error: "Invalid email or password" });
+        }
     } catch (error) {
         res.status(500).json({ message: "Opps ! Something went wrong :(", error: "Internal Server Error !" });
     }
