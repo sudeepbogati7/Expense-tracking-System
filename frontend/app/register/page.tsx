@@ -39,7 +39,7 @@ export default function Register() {
                 body: JSON.stringify(formData)
             });
             if (!response.ok) {
-                throw new Error('Registration failed');
+                alert('Registration failed');
             }
             const data = await response.json();
             localStorage.setItem('token', data.token)
