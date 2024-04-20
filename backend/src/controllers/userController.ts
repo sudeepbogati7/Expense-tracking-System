@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import otpGenerator from 'otp-generator'
 import { otpMailAfterRegister } from '../utils/sendMail';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken';
 import NodeCache from 'node-cache';
 const otpCache = new NodeCache();
 const userCache = new NodeCache();
@@ -17,12 +17,14 @@ interface RegisterUserBody {
     confirmPassword: string;
 }
 
+require('dotenv').config();
+const jwt_secret: any = process.env.JWT_SECRET;
 // <-------------------------- Sending OTP , storing userInfo in NodeCache  ---------------------------------->
 const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
     try {
         const { fullName, email, password, confirmPassword } = req.body;
+        if (!fullName || !email || !password || !confirmPassword) return res.status(400).json({ error: "All fields are required! " });
         const user = await User.findOne({ where: { email } });
-
         if (user) return res.status(409).json({ error: "Email already Exists ! " });
 
         if (password !== confirmPassword) return res.status(401).json({ error: "Passwords must be same" });
@@ -108,6 +110,9 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
 const loginUser = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
+
+
+
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ message: "No User Found ! Have you registered ?" });
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -123,7 +128,7 @@ const loginUser = async (req: Request, res: Response) => {
             expirationDate.setDate(expirationDate.getDate() + 30);
             res.cookie("token", token, { secure: true, httpOnly: true, expires: expirationDate })
         } else {
-            res.status(401).json({ error: "Invalid email or password" });
+            return res.status(401).json({ error: "Invalid email or password" });
         }
     } catch (error) {
         res.status(500).json({ message: "Opps ! Something went wrong :(", error: "Internal Server Error !" });
@@ -142,45 +147,54 @@ const logoutUser = async (req: Request, res: Response) => {
 }
 
 // <-------------------------- Forget Password ---------------------------------->
-import generateToken from '../utils/passwordReset';
-import { passwordResetMail } from '../utils/sendMail';
-import { string } from 'joi';
-import { isEqualsGreaterThanToken } from 'typescript';
+import { passwordResetTokenMail } from '../utils/sendMail';
+const reset_otp_cache = new NodeCache();
 
 const forgetPasswordMailController = async (req: Request, res: Response) => {
-    const { email } = req.body;
-    const user = await User.findOne({ where: { email } });
-    const resetToken = generateToken();
-    const resetLink = `http://localhost:3000/api/user/forgot-password/:${resetToken}`;
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(403).json({ error: "Please enter your associated email." });
+        const user = await User.findOne({ where: { email } });
+        const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
+        // save the data to the cache 
+        res.cookie('reset_email', email, { httpOnly: true });
+        reset_otp_cache.set(email, otp);
 
-    if (user) {
-        res.cookie('email_ref', email, { secure: true, httpOnly: true });
-        const fullName = user.fullName;
-        passwordResetMail(email, fullName, res, resetLink);
-    } else {
-        res.status(404).json({ error: "No user found with the provided email !" });
+        if (!user) return res.status(404).json({ message: "No user found associated with the provided email." });
+        passwordResetTokenMail(email, user.fullName, res, otp)
+        return res.status(200).json({ message: "We have sent you an OTP email. Check your email inbox." });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error :( Please try again later." });
     }
 };
 
 
 const forgetPasswordHandler = async (req: Request, res: Response) => {
     try {
-        const email = req.cookies.email_ref;
-        const { password, confirmPassword } = req.body;
-        if (password !== confirmPassword) res.status(409).json({ error: "Passwords don't match !" });
+        let { otp, password, confirmPassword } = req.body;
+        if (!password || !confirmPassword) return res.status(400).json({ error: "Please set your new password" });
+
+        otp = otp.trim();
+        password = password.trim();
+        if (!otp) return res.status(400).json({ error: "Please enter your OTP" });
+        confirmPassword = confirmPassword.trim();
+        const email = req.cookies.reset_email;
+        const cachedOTP = reset_otp_cache.get(email);
+
         const user = await User.findOne({ where: { email } });
-        if (user) {
-            user.password = confirmPassword;
-            await user.save();
-            res.status(200).json({ message: "Successfully Updated password ;) " });
-        } else {
-            res.status(401).json({ error: "Invalid email " });
-        }
+        if (!user) return res.status(404).json({ error: "NO USER FOUND !!" });
+        if (password !== confirmPassword) return res.status(400).json({ error: "Passwords don't match " });
+        if (otp !== cachedOTP) return res.status(400).json({ error: "Invalid or incorrect OTP " });
+        user.password = password;
+        user.save();
+        return res.status(200).json({ message: "Password reset successful" });
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             error: "Internal Server Error :( Please try again later."
         });
     }
 };
-
 export { loginUser, sendOTPAndCacheUserData, registerUserAfterOTPVerification, logoutUser, forgetPasswordMailController, forgetPasswordHandler };
