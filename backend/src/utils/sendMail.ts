@@ -33,7 +33,7 @@ export const otpMailAfterRegister = (email: string, name: string, res: Response,
             if (error) {
                 res.status(500).json({ message: "Error while sending email ", error: error.message })
             } else {
-                res.status(200).json({ message: "Please check your email for OTP." })
+                res.status(200).json({ message: "Please check your email for OTP.", email: email })
             }
         });
     } catch (error) {

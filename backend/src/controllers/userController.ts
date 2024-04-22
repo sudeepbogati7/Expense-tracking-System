@@ -37,7 +37,7 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         otpCache.set(email, otp);
         userCache.set(email, userData);
 
-        res.cookie('user_email', email, { httpOnly: true });
+        res.cookie('user_email', email);
 
         // send OTP mail , configured in @utils/sendMail.ts
         otpMailAfterRegister(email, fullName, res, otp);
@@ -90,7 +90,10 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
                 // sending token through cookies as well 
                 const expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + 30);
-                res.cookie("token", token, { secure: true, httpOnly: true, expires: expirationDate })
+                res.cookie("token", token, { expires: expirationDate })
+                userCache.del(email);
+                otpCache.del(email);
+                res.clearCookie('user_email');
             } catch (error) {
                 res.status(500).json({ error: "Opps , something went wrong. Please try again later" });
                 console.log("Error while saving into database :", error);
@@ -98,9 +101,6 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
         } else {
             return res.status(401).json({ error: "Invalid OTP. Please enter the correct OTP." });
         }
-        userCache.del(email);
-        otpCache.del(email);
-        res.clearCookie('user_email');
     } catch (err) {
         res.status(500).json({ error: "Internal Server Error :( , Please try again later. " });
     }
@@ -126,7 +126,7 @@ const loginUser = async (req: Request, res: Response) => {
             })
             const expirationDate = new Date();
             expirationDate.setDate(expirationDate.getDate() + 30);
-            res.cookie("token", token, { secure: true, httpOnly: true, expires: expirationDate })
+            res.cookie("token", token, { expires: expirationDate })
         } else {
             return res.status(401).json({ error: "Invalid email or password" });
         }
@@ -157,7 +157,7 @@ const forgetPasswordMailController = async (req: Request, res: Response) => {
         const user = await User.findOne({ where: { email } });
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
         // save the data to the cache 
-        res.cookie('reset_email', email, { httpOnly: true });
+        res.cookie('reset_email', email);
         reset_otp_cache.set(email, otp);
 
         if (!user) return res.status(404).json({ message: "No user found associated with the provided email." });
