@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 export default function Register() {
     const { responseData, setResponseData } = useResponseData();
+    const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -38,18 +39,19 @@ export default function Register() {
                 },
                 body: JSON.stringify(formData)
             });
-            if (!response.ok) {
-                alert('Registration failed');
+            if (response.ok) {
+                const data = await response.json();
+                setResponseData(data);
+                setError(null);
+                // router.push('/');
+            } else {
+                const errorData = await response.json();
+                setError(errorData);
             }
-            const data = await response.json();
-            localStorage.setItem('token', data.token)
-            setResponseData(data);
-            router.push('/login');
         } catch (error) {
             console.error('Registration error:', error);
         }
     };
-
     return (
         <div className='h-screen w-full'>
             <header className='h-16 flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
@@ -60,6 +62,8 @@ export default function Register() {
                 </Link>
             </header>
             <main>
+                {responseData ? <OkayNortification data={responseData} /> : null}
+                {error ? <div className='text-xl text-red-600 '>{error}</div> : null}
                 <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form
@@ -144,4 +148,14 @@ export default function Register() {
             </footer>
         </div>
     )
+}
+
+
+const OkayNortification = (props: any) => {
+    const { responseData } = props.data;
+    return (
+        <div>
+            <div className='text-green-400 text-lg'>This is Okay nortification </div>
+        </div>
+    );
 }

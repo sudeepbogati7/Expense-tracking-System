@@ -1,6 +1,6 @@
 'use client';
-import './login.css';
-import '../page.css';
+import '../login.css';
+import '../../page.css';
 import 'tailwindcss/tailwind.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
@@ -16,8 +16,7 @@ export default function Login() {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: ''
     });
     const { setResponseData } = useResponseData();
     const router = useRouter();
@@ -31,7 +30,7 @@ export default function Login() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/login', {
+            const response = await fetch('http://localhost:3001/api/user/forget-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -39,10 +38,7 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                router.push('/')
-                const data = await response.json();
-                localStorage.setItem('token', data.token);
-                setError(null);
+                router.push('/login/forget-password/reset')
             } else {
                 const errorData = await response.json();
                 setError(errorData);
@@ -53,6 +49,7 @@ export default function Login() {
         }
     };
 
+    console.log(error)
     return (
         <div className='h-screen w-full'>
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
@@ -64,7 +61,7 @@ export default function Login() {
             </header>
             <main>
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
-                    <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Login </span> Your Identity</span>
+                    <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Forget </span> password</span>
                     <form
                         onSubmit={handleSubmit}
                         className='flex flex-col p-6 justify-center mx-auto w-full'>
@@ -79,21 +76,11 @@ export default function Login() {
                                 className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
                             />
                         </div>
-                        <div className='w-full px-4'>
-                            <label className='tracking-wide mx-2 font-medium' htmlFor="password">Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                className='w-full border-2 border-gray-200 dark:border-none p-2 rounded-lg outline-none'
-                                placeholder='********' />
-                        </div>
                         <div className='px-4'>
                             <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full dark:shadow-lg dark:shadow-orange-600/40 mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
                         </div>
-                        <Link href='/login/forget-password' className='mx-auto text-base '> Forgot password ? </Link>
-                        <div className='mx-auto my-4 text-base'>Don't have an account ? <Link href={'/register'}> <span className='text-orange-600 border-b border-orange-400'> Register </span> </Link></div>
+                        <div onClick={() => router.back()} className='cursor-pointer mx-auto my-4 text-lg'><span className='text-orange-600 border-b border-orange-400'> {'<--'} Back </span></div>
+
                     </form>
                 </div>
             </main>
