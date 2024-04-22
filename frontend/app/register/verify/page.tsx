@@ -1,37 +1,39 @@
 'use client';
-import '../login/login.css';
-import '../page.css';
+import '../../login/login.css';
+import '../../page.css';
 import 'tailwindcss/tailwind.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
+import Header from '@/components/Header';
+
 import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
-export default function Register() {
+
+
+
+export default function Verify() {
     const { responseData, setResponseData } = useResponseData();
+    console.log("Response data from verify :;;;;;;;;;;;;;;;;;;;;;;;;;;;", responseData)
+    const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
-        fullName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+        otp: ''
     });
-
     const router = useRouter();
-    if (localStorage.getItem('token')) router.push('/');
-
-    console.log("Response data ---------------------->> ", responseData)
+    if (localStorage.getItem('token')) router.push('/')
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/register', {
+            const response = await fetch('http://localhost:3001/api/user/register/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,93 +42,58 @@ export default function Register() {
             });
             if (response.ok) {
                 const data = await response.json();
+                router.push('/login')
                 setResponseData(data);
-                setError(null);
-                router.push('/register/verify');
             } else {
                 const errorData = await response.json();
                 setError(errorData);
             }
-        } catch (error) {
-            console.error('Registration error:', error);
+        } catch (error: any) {
+            setResponse(null);
+            setError(error.message)
         }
     };
+
+    console.log(error)
     return (
         <div className='h-screen w-full'>
-            <header className='h-16 flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
+            <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                 <span className='my-auto'><ThemeSwitcher /></span>
                 <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>
-                <Link href={'/about-me'} className='border px-3 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
+                <Link href={'/about-me'} className='text-center my-auto border px-2 py-0 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
                     About
                 </Link>
             </header>
             <main>
                 {error && <ErrorResponse errorResponse={error} />}
-                <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 w-full'>
-                    <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
+                {responseData && <OkayNotification registerResponseData={responseData} />}
+                <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
+                    <span className='text-center text-xl font-medium p-2'>Check your email for  <span className='text-orange-600 border-b border-orange-300'> OTP </span> </span>
                     <form
                         onSubmit={handleSubmit}
-                        className='flex flex-col p-6 justify-center mx-auto w-full'
-                    >
-                        <div className='flex flex-col w-full px-4 py-2'>
-                            <label className='mx-2 font-medium tracking-wide' htmlFor="email">Full Name </label>
+                        className='flex flex-col p-6 justify-center mx-auto w-full'>
+                        <div className='flex flex-col w-full p-4'>
+                            <label className='mx-2 font-medium tracking-wide' htmlFor="email">OTP</label>
                             <input
                                 type="text"
-                                name='fullName'
-                                placeholder='Salman Khan'
-                                value={formData.fullName}
+                                name='otp'
+                                value={formData.otp}
                                 onChange={handleChange}
-                                required
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
+                                placeholder='s4e1ps'
+                                className='w-full border-2 border-gray-200 dark:border-none p-2 focus:border-2 focus:shadow-orange-400/10 focus:shadow-lg transision duration-300 ease-in-out rounded-lg outline-none'
                             />
-                        </div>
-                        <div className='flex flex-col w-full px-4 py-2'>
-                            <label className='mx-2 font-medium tracking-wide' htmlFor="email">Email</label>
-                            <input
-                                type="email"
-                                name='email'
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder='salman.khan@example.com'
-                                required
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
-                            />
-                        </div>
-                        <div className='w-full px-4 py-2'>
-                            <label className='tracking-wide mx-2 font-medium' >Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
-                                required
-                                placeholder='********'
-                            />
-
-                        </div>
-                        <div className='w-full px-4 py-2'>
-                            <label className='tracking-wide mx-2 font-medium' htmlFor="confirmPassword">Confirm password</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                className={` w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none`}
-                                required
-                                placeholder='********' />
                         </div>
                         <div className='px-4'>
-                            <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full  mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
+                            <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full dark:shadow-lg dark:shadow-orange-600/40 mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Verify and Register </button>
                         </div>
+                        <div onClick={() => router.back()} className='cursor-pointer mx-auto my-4 text-lg'><span className='text-orange-600 border-b border-orange-400'> {'<--'} Back </span></div>
 
-                        <div className='mx-auto text-base'>Already have an account? <Link href={'/login'}> <span className='text-orange-600 border-b border-orange-400'> Login  </span> </Link></div>
                     </form>
                 </div>
             </main>
-            <footer className='flex top-5/6  fixed items-center flex-col bottom-0 border-t-2 border-gray-300 dark:border-gray-600 w-full h-16 bg-gray-200 dark:bg-gray-800'>
-                <div className='p-2 text-sm font-medium text-gray-600 dark:text-gray-400'>Connect with me </div>
-                <div className="flex pb-2 gap-8 items-center justify-center w-full">
+            <footer className='flex fixed items-center flex-col bottom-0 border-t-2 border-gray-300 dark:border-gray-600 w-full h-24 bg-gray-200 dark:bg-gray-800'>
+                <div className='p-2 text-lg font-medium text-gray-600 dark:text-gray-400'>Connect with me </div>
+                <div className=" flex gap-8 items-center justify-center w-full">
                     <Link className="socialContainer containerOne " href="https://instagram.com/the.sudeep_">
                         <svg viewBox="0 0 16 16" className="socialSvg instagramSvg"> <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"></path> </svg>
                     </Link>
@@ -148,6 +115,16 @@ export default function Register() {
     )
 }
 
+const OkayNotification = ({ registerResponseData }: any) => {
+    if (!registerResponseData) return null;
+    const message = registerResponseData.message;
+    const email = registerResponseData.email;
+    return (
+        <div className="notification bg-green-100 text-green-700 p-4 rounded-md shadow-sm">
+            <span className="font-medium">Successfully sent OTP to " {email} " </span>
+        </div>
+    );
+};
 
 const ErrorResponse = ({ errorResponse }: any) => {
     if (!errorResponse) return null;
