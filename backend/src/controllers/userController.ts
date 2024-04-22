@@ -187,7 +187,9 @@ const forgetPasswordHandler = async (req: Request, res: Response) => {
         if (!user) return res.status(404).json({ error: "NO USER FOUND !!" });
         if (password !== confirmPassword) return res.status(400).json({ error: "Passwords don't match " });
         if (otp !== cachedOTP) return res.status(400).json({ error: "Invalid or incorrect OTP " });
-        user.password = password;
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        user.password = hashedPassword;
         user.save();
         return res.status(200).json({ message: "Password reset successful" });
     } catch (err) {
