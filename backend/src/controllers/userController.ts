@@ -32,16 +32,25 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
 
 
-        const userData = { fullName, email, password };
-        // save OTP in node-cache
-        otpCache.set(email, otp);
-        userCache.set(email, userData);
-
-        res.cookie('user_email', email);
-
+        // const userData = { fullName, email, password };
+        // // save OTP in node-cache
+        // otpCache.set(email, otp);
+        // userCache.set(email, userData);
+        // res.cookie('user_email', email);
         // send OTP mail , configured in @utils/sendMail.ts
         otpMailAfterRegister(email, fullName, res, otp);
-
+        const newUser = await User.create({
+            fullName,
+            email,
+            password
+        });
+        const token = genAuthToken(newUser);
+        const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
+        res.status(201).json({
+            message: "Successfully sent verification OTP.",
+            user: userWithoutPassword,
+            token : token
+        });
 
     } catch (error) {
         res.status(500).json({
@@ -54,46 +63,26 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
 // <-------------------------- Register user if OTP is corrent and valid  ---------------------------------->
 const registerUserAfterOTPVerification = async (req: Request, res: Response) => {
     try {
-        const email = req.cookies.user_email;
+        const { otpFromUser, email } = req.body;
         if (!email) {
             return res.status(400).json({
                 error: "Email not found ! Please complete the initial registration first ."
             });
         }
-        const { otp } = req.body;
+        if(!otpFromUser ) return res.status(400).json({error : "Please enter your OTP"})
 
-        const userData: any = userCache.get(email);
-        const cachedOTP = otpCache.get(email);
-        if (!userData || !cachedOTP) {
-            return res.status(400).json({ error: "User data or OTP not found. Please request OTP again." });
-        }
+        const user = await User.findOne({ where: { email } });
+        if (!user) return res.status(404).json({ error: "No user found with the provided email." });
+        const otpFromDB = user.otp;
+
         // Verify OTP
-        if (cachedOTP == otp) {
+        if (otpFromDB == otpFromUser) {
             try {
-
-                const newUser = await User.create({
-                    fullName: userData.fullName,
-                    email: userData.email,
-                    password: userData.password
+                user.isVerified = true;
+                res.status(200).json({
+                    message: "Verification Successful",
+                    user: user
                 });
-                // Generate JWT token
-                const token = genAuthToken(newUser);
-                // Omit password from user object
-                const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
-                // Remove user data from cache after registration & email cookie from cookies
-                res.status(201).json({
-                    message: "User registration successful.",
-                    user: userWithoutPassword,
-                    token: token
-                });
-
-                // sending token through cookies as well 
-                const expirationDate = new Date();
-                expirationDate.setDate(expirationDate.getDate() + 30);
-                res.cookie("token", token, { expires: expirationDate })
-                userCache.del(email);
-                otpCache.del(email);
-                res.clearCookie('user_email');
             } catch (error) {
                 res.status(500).json({ error: "Opps , something went wrong. Please try again later" });
                 console.log("Error while saving into database :", error);
@@ -105,15 +94,13 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
         res.status(500).json({ error: "Internal Server Error :( , Please try again later. " });
     }
 };
-
 // <-------------------------- Login  ---------------------------------->
 const loginUser = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
-
-
         const user = await User.findOne({ where: { email } });
+
         if (!user) return res.status(404).json({ message: "No User Found ! Have you registered ?" });
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (isPasswordValid) {
@@ -123,7 +110,7 @@ const loginUser = async (req: Request, res: Response) => {
                 message: "Login Successfull !",
                 user: userWithoutPassword,
                 token: token
-            })
+            });
             const expirationDate = new Date();
             expirationDate.setDate(expirationDate.getDate() + 30);
             res.cookie("token", token, { expires: expirationDate })

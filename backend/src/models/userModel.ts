@@ -44,6 +44,19 @@ export class User extends Model {
     })
     confirmPassword?: string;
 
+    @Column({
+        type: DataType.STRING,
+        allowNull: true
+    })
+    otp?: string;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: true,
+        defaultValue : false,
+    })
+    isVerified ?: boolean 
+
     @BeforeCreate
     static async hashPasswordAndRemoveConfirmPassword(instance: User): Promise<void> {
         if (instance.changed('password')) {
