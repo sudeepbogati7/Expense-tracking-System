@@ -42,7 +42,8 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         const newUser = await User.create({
             fullName,
             email,
-            password
+            password,
+            otp
         });
         const token = genAuthToken(newUser);
         const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
@@ -63,20 +64,20 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
 // <-------------------------- Register user if OTP is corrent and valid  ---------------------------------->
 const registerUserAfterOTPVerification = async (req: Request, res: Response) => {
     try {
-        const { otpFromUser, email } = req.body;
+        const { otp, email } = req.body;
         if (!email) {
             return res.status(400).json({
                 error: "Email not found ! Please complete the initial registration first ."
             });
         }
-        if(!otpFromUser ) return res.status(400).json({error : "Please enter your OTP"})
+        if(!otp ) return res.status(400).json({error : "Please enter your OTP"})
 
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ error: "No user found with the provided email." });
         const otpFromDB = user.otp;
 
         // Verify OTP
-        if (otpFromDB == otpFromUser) {
+        if (otpFromDB == otp) {
             try {
                 user.isVerified = true;
                 res.status(200).json({

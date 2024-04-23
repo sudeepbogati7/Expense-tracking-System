@@ -2,10 +2,10 @@ import nodemailer from 'nodemailer';
 require('dotenv').config();
 import { Response } from 'express';
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    host: 'gmail',
+    service: 'maildev',
+    host: 'localhost',
     secure: false,
-    port: 587,
+    port: 1025,
     auth: {
         user: process.env.EMAIL_NAME,
         pass: process.env.EMAIL_PASS
