@@ -20,7 +20,6 @@ export default function Register() {
     });
 
     const router = useRouter();
-    if (localStorage.getItem('token')) router.push('/');
 
     console.log("Response data ---------------------->> ", responseData)
 
@@ -42,7 +41,8 @@ export default function Register() {
                 const data = await response.json();
                 setResponseData(data);
                 setError(null);
-                router.push(`/register/verify/?token=${data}`);
+                localStorage.setItem('token', data.token)
+                router.push(`/register/verify/?email=${data.user.email}`);
             } else {
                 const errorData = await response.json();
                 setError(errorData);
@@ -77,6 +77,7 @@ export default function Register() {
                                 value={formData.fullName}
                                 onChange={handleChange}
                                 required
+                                autoComplete='on'
                                 className='w-full border-2 border-gray-200 p-2 rounded-lg outline-none dark:border-none'
                             />
                         </div>

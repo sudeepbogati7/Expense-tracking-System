@@ -9,18 +9,23 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import Header from '@/components/Header';
 
-import { useRouter } from 'next/navigation';
+import { useRouter , useSearchParams} from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 
 
 
 export default function Verify() {
+    const params = useSearchParams();
+
+    const email = params.get('email');
     const { responseData, setResponseData } = useResponseData();
     console.log("Response data from verify :;;;;;;;;;;;;;;;;;;;;;;;;;;;", responseData)
+
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
-        otp: ''
+        otp: '',
+        email : email,
     });
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/')
@@ -42,8 +47,9 @@ export default function Verify() {
             });
             if (response.ok) {
                 const data = await response.json();
-                router.push('/login')
+                router.push('/')
                 setResponseData(data);
+                setError(null);
             } else {
                 const errorData = await response.json();
                 setError(errorData);
@@ -118,7 +124,7 @@ export default function Verify() {
 const OkayNotification = ({ registerResponseData }: any) => {
     if (!registerResponseData) return null;
     const message = registerResponseData.message;
-    const email = registerResponseData.email;
+    const email = registerResponseData.user.email;
     return (
         <div className="notification bg-green-100 text-green-700 p-4 rounded-md shadow-sm">
             <span className="font-medium">Successfully sent OTP to " {email} " </span>
