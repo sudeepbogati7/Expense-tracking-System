@@ -42,7 +42,7 @@ export default function Register() {
                 const data = await response.json();
                 setResponseData(data);
                 setError(null);
-                router.push('/register/verify');
+                router.push(`/register/verify/?token=${data}`);
             } else {
                 const errorData = await response.json();
                 setError(errorData);
