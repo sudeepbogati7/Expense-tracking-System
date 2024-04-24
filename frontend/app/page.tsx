@@ -22,6 +22,8 @@ export default function Home() {
 
   console.log("Response data from page.tsx : ", responseData);
   
+
+
   // check for the token 
   const token = localStorage.getItem('token');
   if (!token) router.push('/register');

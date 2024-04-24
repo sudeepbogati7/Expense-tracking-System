@@ -35,18 +35,17 @@ export default function Register() {
                 },
                 body: JSON.stringify(formData)
             });
-            if (response.ok) {
-                const data = await response.json();
+            const data = await response.json();
+            if (response.ok && data.success == true) {
                 setResponseData(data);
                 setError(null);
-                // localStorage.setItem('token', data.token)asaasdfg
-                router.push(`register/verify/?email=${data.user.email}`);
+                localStorage.setItem('token', data.token);
+                router.push(`/register/verify/?email=${data.user.email}`);
             } else {
-                const errorData = await response.json();
-                setError(errorData);
+                setError(data);
             }
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error('Registration error:', error)
         }
     };
     return (
@@ -150,7 +149,7 @@ export default function Register() {
 
 const ErrorResponse = ({ errorResponse }: any) => {
     if (!errorResponse) return null;
-    const error = errorResponse.error;
+    const error = errorResponse.error || errorResponse.message;
     return (
         <div className="notification bg-red-100 text-red-700 p-4 rounded-md shadow-sm">
             <span className="font-medium"></span> {error}

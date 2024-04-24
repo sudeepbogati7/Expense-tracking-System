@@ -16,19 +16,17 @@ import { useResponseData } from '@/components/ResponseDataContext';
 
 export default function Verify() {
     const params = useSearchParams();
-
     const email = params.get('email');
     const { responseData, setResponseData } = useResponseData();
     console.log("Response data from verify :;;;;;;;;;;;;;;;;;;;;;;;;;;;", responseData)
 
-    const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         otp: '',
         email : email,
     });
     const router = useRouter();
-    if (localStorage.getItem('token')) router.push('/')
+    // if (localStorage.getItem('token')) router.push('/')
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -45,17 +43,15 @@ export default function Verify() {
                 },
                 body: JSON.stringify(formData)
             });
+            const data = await response.json();
             if (response.ok) {
-                const data = await response.json();
                 router.push('/')
                 setResponseData(data);
                 setError(null);
             } else {
-                const errorData = await response.json();
-                setError(errorData);
+                setError(data);
             }
         } catch (error: any) {
-            setResponse(null);
             setError(error.message)
         }
     };

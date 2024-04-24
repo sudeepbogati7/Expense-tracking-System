@@ -12,17 +12,13 @@ import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 
 export default function Login() {
-
-    const [response, setResponse] = useState(null);
+    const router = useRouter();
+    const { responseData, setResponseData } = useResponseData();
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
-    const { setResponseData } = useResponseData();
-    const router = useRouter();
-    // if (localStorage.getItem('token')) router.push('/')
-
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -38,17 +34,16 @@ export default function Login() {
                 },
                 body: JSON.stringify(formData)
             });
+            const data = await response.json();
             if (response.ok) {
-                router.push('/')
-                const data = await response.json();
+                // router.push('/')
                 localStorage.setItem('token', data.token);
+                setResponseData(data);
                 setError(null);
             } else {
-                const errorData = await response.json();
-                setError(errorData);
+                setError(data);
             }
         } catch (error: any) {
-            setResponse(null);
             setError(error.message)
         }
     };
