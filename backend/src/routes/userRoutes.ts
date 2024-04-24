@@ -6,7 +6,7 @@ const router = Express.Router();
 
 
 router.post('/login', loginUser); //login user
-router.post('/register', sendOTPAndCacheUserData);
+router.post('/register',validateUserRegistration, sendOTPAndCacheUserData);
 router.post('/register/verify-otp', registerUserAfterOTPVerification);
 router.post('/logout', logoutUser)
 router.post('/forget-password', forgetPasswordMailController);
