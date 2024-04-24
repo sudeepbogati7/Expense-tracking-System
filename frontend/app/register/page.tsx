@@ -4,7 +4,6 @@ import '../page.css';
 import 'tailwindcss/tailwind.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -18,7 +17,6 @@ export default function Register() {
         password: '',
         confirmPassword: ''
     });
-
     const router = useRouter();
 
     console.log("Response data ---------------------->> ", responseData)
@@ -41,8 +39,8 @@ export default function Register() {
                 const data = await response.json();
                 setResponseData(data);
                 setError(null);
-                localStorage.setItem('token', data.token)
-                router.push(`/register/verify/?email=${data.user.email}`);
+                // localStorage.setItem('token', data.token)asaasdfg
+                router.push(`register/verify/?email=${data.user.email}`);
             } else {
                 const errorData = await response.json();
                 setError(errorData);

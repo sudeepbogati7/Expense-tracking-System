@@ -60,7 +60,7 @@ export default function Verify() {
         }
     };
 
-    console.log(error)
+    console.log("Error from verify page : ",error)
     return (
         <div className='h-screen w-full'>
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>

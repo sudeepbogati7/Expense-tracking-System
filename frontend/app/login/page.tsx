@@ -21,7 +21,7 @@ export default function Login() {
     });
     const { setResponseData } = useResponseData();
     const router = useRouter();
-    if (localStorage.getItem('token')) router.push('/')
+    // if (localStorage.getItem('token')) router.push('/')
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
