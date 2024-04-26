@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType, BeforeCreate } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, BeforeCreate , HasMany, ForeignKey, BelongsTo} from 'sequelize-typescript';
+import { User } from './userModel';
 
 @Table({
     tableName: 'expenses',
@@ -22,8 +23,20 @@ export class Expenses extends Model {
     expenseTitle!: string;
 
     @Column({
-        type: DataType.NUMBER,
+        type: DataType.DOUBLE,
         allowNull : false
     })
     amount!: number;
-}   
+
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull : false,
+    })
+    userId !: number
+    
+    @BelongsTo(() => User)
+    user !: User
+    
+}
+

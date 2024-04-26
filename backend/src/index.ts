@@ -26,6 +26,8 @@ import router from "./routes/userRoutes";
 app.use('/api/user', router);
 
 
+import expenseRoutes from './routes/expenseRoutes'
+app.use('/api/expenses', expenseRoutes);
 // env variables check 
 require('./utils/envVariables')();
 // database synchronization
