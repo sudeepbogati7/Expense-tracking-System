@@ -11,6 +11,7 @@ import Header from '@/components/Header';
 
 import { useRouter , useSearchParams} from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
+import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
 
 
@@ -67,8 +68,8 @@ export default function Verify() {
                 </Link>
             </header>
             <main>
-                {error && <ErrorResponse errorResponse={error} />}
-                {responseData && <OkayNotification registerResponseData={responseData} />}
+                {error && <ErrorNotification error={error} />}
+                {responseData && <SuccessNotification successResponse={responseData} />}
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'>Check your email for  <span className='text-orange-600 border-b border-orange-300'> OTP </span> </span>
                     <form
@@ -117,23 +118,3 @@ export default function Verify() {
     )
 }
 
-const OkayNotification = ({ registerResponseData }: any) => {
-    if (!registerResponseData) return null;
-    const message = registerResponseData.message;
-    const email = registerResponseData.user.email;
-    return (
-        <div className="notification bg-green-100 text-green-700 p-4 rounded-md shadow-sm">
-            <span className="font-medium">Successfully sent OTP to " {email} " </span>
-        </div>
-    );
-};
-
-const ErrorResponse = ({ errorResponse }: any) => {
-    if (!errorResponse) return null;
-    const error = errorResponse.error;
-    return (
-        <div className="notification bg-red-100 text-red-700 p-4 rounded-md shadow-sm">
-            <span className="font-medium"></span> {error}
-        </div>
-    )
-}

@@ -10,17 +10,16 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
-
+import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
 export default function Login() {
 
-    const [response, setResponse] = useState(null);
+    const {responseData, setResponseData} = useResponseData();
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         password: '',
         confirmPassword: '',
         otp: ''
     });
-    const { setResponseData } = useResponseData();
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/')
 
@@ -39,14 +38,15 @@ export default function Login() {
                 },
                 body: JSON.stringify(formData)
             });
+            const data = await response.json();
             if (response.ok) {
+                setResponseData(data);
                 router.push('/login')
+                setError(null);
             } else {
-                const errorData = await response.json();
-                setError(errorData);
+                setError(data);
             }
         } catch (error: any) {
-            setResponse(null);
             setError(error.message)
         }
     };
@@ -62,6 +62,8 @@ export default function Login() {
                 </Link>
             </header>
             <main>
+                {error && <ErrorNotification error={ error} />}
+                {responseData && <SuccessNotification successResponse={responseData} />}
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Forget </span> password</span>
                     <form

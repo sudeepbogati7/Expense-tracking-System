@@ -10,15 +10,15 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
+import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
 export default function Login() {
 
-    const [response, setResponse] = useState(null);
+    const {responseData, setResponseData} = useResponseData();
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         email: ''
     });
-    const { setResponseData } = useResponseData();
     const router = useRouter();
     if (localStorage.getItem('token')) router.push('/')
 
@@ -37,21 +37,22 @@ export default function Login() {
                 },
                 body: JSON.stringify(formData)
             });
+            const data = await response.json();
             if (response.ok) {
                 router.push('/login/forget-password/reset')
+                setResponseData(data);
+
             } else {
-                const errorData = await response.json();
-                setError(errorData);
+                setError(data);
             }
         } catch (error: any) {
-            setResponse(null);
             setError(error.message)
         }
     };
-
     console.log(error)
     return (
         <div className='h-screen w-full'>
+            {error && <ErrorNotification error={error} />}
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                 <span className='my-auto'><ThemeSwitcher /></span>
                 <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>

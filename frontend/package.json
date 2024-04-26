@@ -16,7 +16,8 @@
     "next": "^14.2.0",
     "next-themes": "^0.3.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

@@ -14,6 +14,7 @@ import { useResponseData } from '@/components/ResponseDataContext';
 // components
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
+import { SuccessNotification } from '@/components/Notifications';
 
 export default function Home() {
   const router = useRouter();
@@ -48,13 +49,12 @@ export default function Home() {
 
   return (
     <>
+    { responseData && <SuccessNotification successResponse={ responseData} />}
       <div className="container h-screen w-full">
         {/* header */}
         <Header />
 
         {/* Total Expense Viewer */}
-        {responseData && <OkayNotification registerResponseData={responseData} />}
-        {error && <ErrorResponse errorResponse={ error} />}
         <div className='flex flex-col border-b-4 border-gray-200 dark:border-gray-600  h-38 w-full mx-auto '>
           <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
           <div className='flex justify-center align-center'>
@@ -239,24 +239,3 @@ export function SideBar({ open, setOpen }: any) {
   )
 }
 
-
-
-export const OkayNotification = ({ registerResponseData }: any) => {
-  if (!registerResponseData) return null;
-  const message = registerResponseData.message;
-  return (
-    <div className="notification bg-green-100 text-green-700 p-4 rounded-md shadow-sm">
-      <span className="font-medium"> {message} </span>
-    </div>
-  );
-};
-
-export const ErrorResponse = ({ errorResponse }: any) => {
-    if (!errorResponse) return null;
-    const error = errorResponse.error;
-    return (
-        <div className="notification bg-red-100 text-red-700 p-4 rounded-md shadow-sm">
-            <span className="font-medium"></span> {error}
-        </div>
-    )
-}

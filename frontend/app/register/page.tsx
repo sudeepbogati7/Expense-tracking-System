@@ -8,6 +8,9 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
+import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
+
+
 export default function Register() {
     const { responseData, setResponseData } = useResponseData();
     const [error, setError] = useState(null);
@@ -48,6 +51,7 @@ export default function Register() {
             console.error('Registration error:', error)
         }
     };
+    console.log("Error while registration =====> ", error)
     return (
         <div className='h-screen w-full'>
             <header className='h-16 flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
@@ -58,7 +62,8 @@ export default function Register() {
                 </Link>
             </header>
             <main>
-                {error && <ErrorResponse errorResponse={error} />}
+                {responseData && <SuccessNotification successResponse={responseData}  />}
+                {error && <ErrorNotification error={error}  />}
                 <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form
@@ -146,13 +151,3 @@ export default function Register() {
     )
 }
 
-
-const ErrorResponse = ({ errorResponse }: any) => {
-    if (!errorResponse) return null;
-    const error = errorResponse.error || errorResponse.message;
-    return (
-        <div className="notification bg-red-100 text-red-700 p-4 rounded-md shadow-sm">
-            <span className="font-medium"></span> {error}
-        </div>
-    )
-}
