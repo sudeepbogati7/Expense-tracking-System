@@ -8,14 +8,15 @@ import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import Header from '@/components/Header';
-import { useRouter } from 'next/navigation';
+import { useRouter,useSearchParams } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
 export default function Login() {
-
+    const params = useSearchParams();
     const {responseData, setResponseData} = useResponseData();
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
+        email : params.get('email'),
         password: '',
         confirmPassword: '',
         otp: ''
@@ -63,7 +64,6 @@ export default function Login() {
             </header>
             <main>
                 {error && <ErrorNotification error={ error} />}
-                {responseData && <SuccessNotification successResponse={responseData} />}
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Forget </span> password</span>
                     <form

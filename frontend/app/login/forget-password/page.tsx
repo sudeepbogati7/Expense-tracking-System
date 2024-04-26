@@ -39,7 +39,7 @@ export default function Login() {
             });
             const data = await response.json();
             if (response.ok) {
-                router.push('/login/forget-password/reset')
+                router.push(`/login/forget-password/reset?email=${formData.email}`)
                 setResponseData(data);
 
             } else {
