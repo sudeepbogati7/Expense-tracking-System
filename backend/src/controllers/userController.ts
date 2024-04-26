@@ -92,6 +92,7 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
         if (otpFromDB == otp) {
             try {
                 user.isVerified = true;
+                user.otp = '';
                 user.save();
                 res.status(200).json({
                     success :true,
@@ -186,15 +187,15 @@ const forgetPasswordMailController = async (req: Request, res: Response) => {
         });
         const user = await User.findOne({ where: { email } });
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
-        // save the data to the cache 
-        res.cookie('reset_email', email);
-        reset_otp_cache.set(email, otp);
 
         if (!user) return res.status(404).json({
             success : false, 
-            message: "No user found associated with the provided email."
+            error: "No user found associated with the provided email."
+
         });
         passwordResetTokenMail(email, user.fullName, res, otp)
+        user.otp = otp;
+        user.save();
         return res.status(200).json({
             success : true, 
             message: "We have sent you an OTP email. Check your email inbox."
@@ -212,32 +213,35 @@ const forgetPasswordMailController = async (req: Request, res: Response) => {
 
 const forgetPasswordHandler = async (req: Request, res: Response) => {
     try {
-        let { otp, password, confirmPassword } = req.body;
+        let { otp , password, confirmPassword , email } = req.body;
         if (!password || !confirmPassword) return res.status(400).json({
             success : false, 
             error: "Please set your new password"
         });
 
-        otp = otp.trim();
+        otp.trim();
+        confirmPassword = confirmPassword.trim();
         password = password.trim();
+
         if (!otp) return res.status(400).json({
             success : false, 
             error: "Please enter your OTP"
         });
-        confirmPassword = confirmPassword.trim();
-        const email = req.cookies.reset_email;
-        const cachedOTP = reset_otp_cache.get(email);
-
+        
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({
             success : false, 
             error: "NO USER FOUND !!"
         });
+
+        const otpFromDB = user.otp;
+        
+        if (!otpFromDB) return res.status(404).json({ "error": "Failed to fetch your OTP." });
         if (password !== confirmPassword) return res.status(400).json({
             success : false, 
             error: "Passwords don't match "
         });
-        if (otp !== cachedOTP) return res.status(400).json({
+        if (otp !== otpFromDB) return res.status(400).json({
             success : false, 
             error: "Invalid or incorrect OTP "
         });
