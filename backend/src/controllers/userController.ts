@@ -34,7 +34,6 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
 
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
 
-
         // const userData = { fullName, email, password };
         // // save OTP in node-cache
         // otpCache.set(email, otp);
@@ -50,19 +49,18 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         });
         const token = genAuthToken(newUser);
         const userWithoutPassword = _.omit(newUser.toJSON(), ['password']);
-        res.status(201).json({
+        return res.status(201).json({
             success : true,
             message: "Successfully sent verification OTP.",
             user: userWithoutPassword,
             token : token
         });
-
     } catch (error) {
-        res.status(500).json({
+        console.log(error);
+        return res.status(500).json({
             success: false,
             error: "Internal Server Error :(",
         });
-        console.log(error);
     }
 };
 
@@ -134,15 +132,15 @@ const loginUser = async (req: Request, res: Response) => {
         if (isPasswordValid) {
             const userWithoutPassword = _.omit(user.toJSON(), ['password']);
             const token = genAuthToken(user);
-            res.status(200).json({
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 30);
+            res.cookie("token", token, { expires: expirationDate })
+            return res.status(200).json({
                 success : true,
                 message: "Login Successfull !",
                 user: userWithoutPassword,
                 token: token
             });
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 30);
-            res.cookie("token", token, { expires: expirationDate })
         } else {
             return res.status(401).json({
                 success : false, 
@@ -150,11 +148,27 @@ const loginUser = async (req: Request, res: Response) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             success : false, 
             message: "Opps ! Something went wrong :(", error: "Internal Server Error !"
         });
     }
+}
+
+
+
+// <------------------- User profile ----------------------------------->
+export const userProfile = async (req: Request, res: Response) => {
+    const userId = (req as any).user.userId;
+    const user = await User.findOne({ where: { userId } });
+    if (!user) res.status(404).json({
+        success: false,
+        error: "No user found !"
+    });
+    return res.status(200).json({
+        success: true,
+        user: user
+    });
 }
 
 
@@ -176,6 +190,7 @@ const logoutUser = async (req: Request, res: Response) => {
 
 // <-------------------------- Forget Password ---------------------------------->
 import { passwordResetTokenMail } from '../utils/sendMail';
+import { any } from 'joi';
 const reset_otp_cache = new NodeCache();
 
 const forgetPasswordMailController = async (req: Request, res: Response) => {

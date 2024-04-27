@@ -12,6 +12,7 @@ const genAuthToken = (user: userType) => {
     const jwtSecretKey: any = process.env.JWT_SECRET;
     const token = jwt.sign(
         {
+            userId : user.userId,
             fullName: user.fullName,
             email: user.email,
         },

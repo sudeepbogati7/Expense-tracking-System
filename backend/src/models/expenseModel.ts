@@ -17,7 +17,7 @@ export class Expenses extends Model {
     @Column({
         type: DataType.STRING,
         validate: {
-            len: [5, 50],
+            len: [2, 50],
         },
     })
     expenseTitle!: string;

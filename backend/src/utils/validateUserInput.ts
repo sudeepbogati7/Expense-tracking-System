@@ -17,3 +17,17 @@ export const validateUserRegistration = (req: Request, res: Response, next: Next
 
     next();
 };
+
+export const validateExpenseInputs = (req: Request, res: Response, next: NextFunction) => {
+    const schema = Joi.object({
+        expenseTitle: Joi.string().min(2).max(50).required(),
+        amount: Joi.number().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+    if (error) return res.status(400).json({
+        success: false,
+        error: error.details.map((detail) => detail.message)
+    });
+    next();
+};
