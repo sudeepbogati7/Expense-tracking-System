@@ -241,7 +241,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
     <>
       {responseData && <SuccessNotification successResponse={responseData } />}
       {error && <ErrorNotification error={ error} />}
-      <div className='pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-1/2 right-14 w-4/5 items-center absolute bottom-0 flex flex-col mx-auto '>
+      <div className='pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 right-8 w-4/5 items-center absolute bottom-0 flex flex-col mx-auto '>
         <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
         <form
           onSubmit={handleExpenseSubmit}
@@ -269,8 +269,8 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
               required
               placeholder='eg.2500' />
           </div>
-          <div className="flex mt-2 max-w-sm items-center justify-between p-4  mx-auto ">
-            <button onClick={onClose} className="active:bg-white  py-2.5 px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</button>
+          <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
+            <button onClick={onClose} className="active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</button>
             <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
           </div>
         </form>
