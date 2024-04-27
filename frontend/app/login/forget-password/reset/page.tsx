@@ -58,7 +58,7 @@ export default function Login() {
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                 <span className='my-auto'><ThemeSwitcher /></span>
                 <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>
-                <Link href={'/about-me'} className='text-center my-auto border px-2 py-0 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
+                <Link href={'/about'} className='text-center my-auto border px-2 py-0 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
                     About
                 </Link>
             </header>
