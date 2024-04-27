@@ -62,20 +62,20 @@ export function LogoutPopup({ onClose, logout }: any) {
     return (
         <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
             {/* Overlay */}
-            <div aria-hidden="true" className="fixed inset-0 bg-black opacity-50"></div>
+            <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
             {/* Popup */}
-            <div className="relative bg-white rounded-lg shadow-md p-6 transform translate-y-4 transition-transform duration-300">
+            <div className="relative dark:bg-gray-700 dark:text-gray-200 bg-white rounded-lg shadow-md p-6 transform translate-y-4 transition-transform duration-300">
                 {/* Close button */}
-                <button onClick={onClose} type="button" className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-600">
+                <button onClick={onClose} type="button" className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-200">
                     <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
 
                 {/* Popup content */}
-                <h2 className="text-xl font-bold mb-4">Logout?</h2>
-                <p className="text-gray-700">Are you sure you would like to logout?</p>
+                <h2 className="text-xl dark:text-gray-200 font-bold mb-4">Logout?</h2>
+                <p className="text-gray-700 dark:text-gray-200">Are you sure you would like to logout?</p>
 
                 {/* Buttons */}
                 <div className="mt-6 flex justify-center space-x-4">

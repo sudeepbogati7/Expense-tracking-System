@@ -25,6 +25,8 @@ interface Expense {
   createdAt: string;
   // Add other properties if needed
 }
+const token = localStorage.getItem('token');
+
 export default function Home() {
 
   const router = useRouter();
@@ -32,7 +34,6 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   // check for the token 
-  const token = localStorage.getItem('token');
 
   const [userData, setUserData] = useState(null);
   const [expenseData, setExpenseData] = useState<any[]>();
@@ -42,8 +43,8 @@ export default function Home() {
 
       try {
         if (!token) {
-          router.push('/register');
-          return;
+          // router.push('/register');
+          // return;
         }
 
         // fetching user profile data
@@ -140,7 +141,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className='flex flex-col gap-4 w-full h-2/4 overflow-y-scroll '>
+        <div className='flex flex-col gap-4 w-full h-2/4 overflow-y-scroll pb-24'>
           {expenseData && expenseData.length > 0 ? (
             expenseData.map((expense, index) => (
               <li
@@ -165,7 +166,7 @@ export default function Home() {
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
         {/* footer section */}
-        <footer className='h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around absolute left-0 bottom-0 w-full'>
+        <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
           <Link href={'/dashboard'} className='bg-orange-200 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </Link>
@@ -190,29 +191,81 @@ export default function Home() {
 
 // popup
 const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  const {responseData, setResponseData} = useResponseData();
+  const [error, setError] = useState(null);
+
+  const [formData, setFormData] = useState({
+        expenseTitle: '',
+        amount: ''
+  });
+  const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+  };
+  
+  
+  const handleExpenseSubmit = async () => {
+    try {
+        const response = await fetch('http://localhost:3001/api/expenses/add', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formData)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            setResponseData(data);
+            setFormData({
+                expenseTitle: '',
+                amount: ''
+            });
+        } else {
+            setError(data); // Set error state if request fails
+        }
+      } catch (error) {
+          console.error("Error while adding expense:", error);
+          setError(error as any); // Set error state if fetch fails
+      }
+  };
+
+  useEffect(() => {
+      handleExpenseSubmit();
+  }, [token]);
+
+  console.log("Error while adding expense:", error);
+  console.log("Successfully added:", responseData);
   if (!isOpen) return null;
   return (
     <>
+      {responseData && <SuccessNotification successResponse={responseData } />}
+      {error && <ErrorNotification error={ error} />}
       <div className='pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-1/2 right-14 w-4/5 items-center absolute bottom-0 flex flex-col mx-auto '>
         <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
         <form
+          onSubmit={handleExpenseSubmit}
           className='w-full px-8'
         >
           <div className='flex gap-4 flex-col'>
-            <label className='tracking-wide font-medium text-gray-600  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
+            <label className='tracking-wide font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
             <input
               className='border-none px-2 py-4 outline-none rounded-2xl'
               type="text"
+              value={formData.expenseTitle}
               name='expenseTitle'
               required
+              onChange={handleChange}
               placeholder='eg.Food' />
           </div>
           <div className='flex gap-4  flex-col mt-4'>
-            <label className='tracking-wide font-medium  text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
+            <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
             <input
               className='border-none px-2 py-4 outline-none rounded-2xl'
               type="number"
-              name='expenseTitle'
+              value={formData.amount}
+              name='amount'
+              onChange={handleChange}
               required
               placeholder='eg.2500' />
           </div>
@@ -303,8 +356,7 @@ export function SideBar({ open, setOpen, userData }: any) {
                     <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
                       <span className='border-b border-gray-200 w-fit mx-auto'>By Sudeep Bogati</span>
                       <Link href={'/about'} className=' text-blue-500 hover:underline w-fit'>About</Link>
-                      <span className='text-sm '>hello@sudipbogati.com.np</span>
-                      <span className='text-sm'>+977-98*******</span>
+                      <span className='text-sm'>info@sudipbogati.com.np</span>
                     </div>
                   </div>
                 </Dialog.Panel>
