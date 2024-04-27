@@ -14,27 +14,53 @@ import { useResponseData } from '@/components/ResponseDataContext';
 // components
 import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
-import { SuccessNotification } from '@/components/Notifications';
+import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
 export default function Home() {
+
   const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
 
-  console.log("Response data from page.tsx : ", responseData);
-  
-
-
   // check for the token 
   const token = localStorage.getItem('token');
-  if (!token) router.push('/register');
+  
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!token) {
+          router.push('/register');
+          return;
+        }
 
+        const response = await fetch('http://localhost:3001/api/user/profile', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+          }
+        })
+        const data = await response.json();
+        if (response.ok) {
+          setUserData(data);
+        } else {
+          setError(data);
+        }
+      } catch (err :any) {
+        setError(err.message)
+      }
+    }
+    fetchData();
+  }, [token,router]);
+
+  console.log(error);
+  console.log("User data profile ========>", userData);
   // date
   const getCurrentDate = () => {
     const currentDate = new Date();
     return currentDate.toDateString(); // You can customize the format as needed
   };
-
   // pop up for adding new expense
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -49,6 +75,7 @@ export default function Home() {
 
   return (
     <>
+      {error && <ErrorNotification error={error}  />}
     { responseData && <SuccessNotification successResponse={ responseData} />}
       <div className="container h-screen w-full">
         {/* header */}
@@ -129,7 +156,7 @@ export default function Home() {
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
             <span className="lable">Add</span>
           </button>
-          <SideBar open={open} setOpen={setOpen} />
+          <SideBar userData= {userData} open={open} setOpen={setOpen} />
           <button
             onClick={toggleSideBar}
             className='bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
@@ -154,7 +181,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
 
 
 //slide bar
-export function SideBar({ open, setOpen }: any) {
+export function SideBar({ open, setOpen , userData}: any) {
   const { responseData, setResponseData } = useResponseData();
   console.log("response data from slide bar ", responseData)
   return (
@@ -218,9 +245,9 @@ export function SideBar({ open, setOpen }: any) {
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
                         </svg>
                       </div>
-                      <div className='pt-2 font-bold text-lg tracking-wide'>{responseData ? responseData.user.fullName : "NO DATA"}</div>
-                      <span className='text-xs p-1 italic '>{responseData ? responseData.user.email : "nodata@user.com"}</span>
-                      <div className='text-xs tracking-wide p-2'>Joined on : {responseData ? responseData.user.createdAt : "no-data-found"}</div>
+                      <div className='pt-2 font-bold text-lg tracking-wide'>{userData ? userData.user.fullName : "NO DATA"}</div>
+                      <span className='text-xs p-1 italic '>{userData ? userData.user.email : "nodata@user.com"}</span>
+                      <div className='text-xs tracking-wide p-2'>Joined on : {userData ? userData.user.createdAt : "no-data-found"}</div>
                     </div>
                     <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
                       <span className='border-b border-gray-200 w-fit mx-auto'>Developed by Sudeep Bogati</span>
