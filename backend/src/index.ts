@@ -14,17 +14,17 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+
+// parse cookies on server side
 app.use(cookieParser());
 
 
 // error handling mechanisms 
 require('./utils/handleErrors')();
 
-
 // routes 
 import router from "./routes/userRoutes";
 app.use('/api/user', router);
-
 
 import expenseRoutes from './routes/expenseRoutes'
 app.use('/api/expenses', expenseRoutes);
