@@ -43,8 +43,8 @@ export default function Home() {
 
       try {
         if (!token) {
-          // router.push('/register');
-          // return;
+          router.push('/register');
+          return;
         }
 
         // fetching user profile data
