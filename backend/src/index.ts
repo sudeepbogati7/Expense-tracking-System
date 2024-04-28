@@ -30,7 +30,12 @@ import expenseRoutes from './routes/expenseRoutes'
 app.use('/api/expenses', expenseRoutes);
 // env variables check 
 require('./utils/envVariables')();
+
+
+
+
 // database synchronization
+// {force:true} deletes all the data from the db and migrates the model changes (only for dev env)
 sequelize.sync()
     .then(() => {
         console.log("Synchronized successfull..............")

@@ -82,3 +82,12 @@ export const editExpenses = async (req: Request, res: Response) => {
     }
         
 }
+
+
+
+export const deleteExpense = async (req: Request, res: Response) =>{
+    const { expenseId } = req.body;
+
+    // to do 
+}
+
