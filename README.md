@@ -12,3 +12,15 @@ It offers features for daily and monthly expense tracking, insightful visualizat
   <li>NEXT js</li>
   <li>Chart js</li>
 </ul>
+
+#### Back-end
+<ul>
+  <li>TypeScript</li>
+  <li>NODE js (Env) </li>
+  <li>Express js</li>
+</ul>
+
+#### Database
+<ul>
+  <li> PostgreSQL </li>
+</ul>
