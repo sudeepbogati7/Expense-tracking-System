@@ -1,11 +1,35 @@
 'use client';
 import 'tailwindcss/tailwind.css';
 import '../page.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+const token = localStorage.getItem('token');
 
 export default function Dashboard() {
+    const [expenseData, setExpenseData] = useState(null);
+    const router = useRouter()
+    if (!token) router.push('/login');
+    useEffect(() => {
+        const fetchExpenses = async () => {
+            const respoonse = await fetch('http://localhost:3001/api/expenses/my-expenses', {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await respoonse.json();
+            if (!respoonse.ok) {
+                alert("Error while fetching your expenses :( ")
+            } else {
+                setExpenseData(data);
+            }
+        }
+        fetchExpenses()
+    });
     return (
         <div>
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between w-full p-4 dark:shadow-gray-500/30 border dark:border-gray-600'>
