@@ -5,11 +5,12 @@ import { where } from 'sequelize';
 // <------------------ Add an expense ------------------------->
 export const addExpense =  async(req: Request, res: Response) => {
     try {
-        const { expenseTitle, amount } = req.body;
+        const { expenseTitle, amount, category } = req.body;
         const userId = (req as any).user.userId;
         const expense = await Expenses.create({
             expenseTitle,
             amount,
+            category,
             userId
         });
         res.status(201).json({
@@ -23,7 +24,6 @@ export const addExpense =  async(req: Request, res: Response) => {
         console.log(err);
     }
 }
-
 
 // <------------------ See all expenses of a user  ------------------------->
 export const getExpenses = async(req: Request, res: Response) => {
@@ -56,7 +56,7 @@ export const editExpenses = async (req: Request, res: Response) => {
         
         const userId = (req as any).user.userId;
         const expenseId: any = req.params;
-        const { expenseTitle, amount } = req.body;
+        const { expenseTitle, amount , category} = req.body;
         
         if (!userId) return res.status(403).json({ error: "Unauthorized access" });
         const expense = await Expenses.findOne({ where: { expenseId, userId } });
@@ -66,7 +66,7 @@ export const editExpenses = async (req: Request, res: Response) => {
                 error: "Expense not found or unauthorized access "
             });
         }
-        await Expenses.update({ expenseTitle, amount }, { where: { expenseId } })
+        await Expenses.update({ expenseTitle, amount , category}, { where: { expenseId } })
         const updatedExpense = await Expenses.findByPk(expenseId);
         res.status(200).json({
             success: true,

@@ -22,6 +22,7 @@ export const validateExpenseInputs = (req: Request, res: Response, next: NextFun
     const schema = Joi.object({
         expenseTitle: Joi.string().min(2).max(50).required(),
         amount: Joi.number().required(),
+        category: Joi.string().required()
     });
 
     const { error } = schema.validate(req.body);

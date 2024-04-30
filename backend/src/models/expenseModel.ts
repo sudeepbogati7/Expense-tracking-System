@@ -28,6 +28,12 @@ export class Expenses extends Model {
     })
     amount!: number;
 
+    @Column({
+        type: DataType.STRING,
+        allowNull: false
+    })
+    category !: string;
+
     @ForeignKey(() => User)
     @Column({
         type: DataType.INTEGER,
