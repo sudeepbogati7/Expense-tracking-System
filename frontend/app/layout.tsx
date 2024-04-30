@@ -1,10 +1,12 @@
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+// import "./globals.css";
 import { ThemeProvider } from './theme-provider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { ResponseDataProvider } from "@/components/ResponseDataContext";
+import { Suspense } from "react";
+import Loading from "./loading";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,15 +23,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-gray-100 dark:bg-[#0d1117] `}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ResponseDataProvider >
-            {children}
-          </ResponseDataProvider>
-        </ThemeProvider>
-      </body>
+      <Suspense fallback={ <Loading/> }>
+        <body
+          className={`${inter.className} bg-gray-100 dark:bg-[#0d1117] `}
+        >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ResponseDataProvider >
+              {children}
+            </ResponseDataProvider>
+          </ThemeProvider>
+        </body>
+      </Suspense>
     </html>
   );
 }

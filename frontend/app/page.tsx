@@ -152,6 +152,7 @@ export default function Home() {
                   <span className='text-xl mr-2'></span>
                   {expense.expenseTitle}
                 </div>
+                <div className='text-xs text-center tracking-widest my-auto'> [ March 20 ]</div>
                 <div className='text-lg'>
                   - <span className='text-red-500 dark:text-orange-500'>Rs. </span>
                   {expense.amount}
@@ -191,47 +192,47 @@ export default function Home() {
 
 // popup
 const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const {responseData, setResponseData} = useResponseData();
+  const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
-        expenseTitle: '',
-        amount: ''
+    expenseTitle: '',
+    amount: ''
   });
   const handleChange = (e: any) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
-  
-  
+
+
   const handleExpenseSubmit = async () => {
     try {
-        const response = await fetch('http://localhost:3001/api/expenses/add', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(formData)
+      const response = await fetch('http://localhost:3001/api/expenses/add', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setResponseData(data);
+        setFormData({
+          expenseTitle: '',
+          amount: ''
         });
-        const data = await response.json();
-        if (response.ok) {
-            setResponseData(data);
-            setFormData({
-                expenseTitle: '',
-                amount: ''
-            });
-        } else {
-            setError(data); // Set error state if request fails
-        }
-      } catch (error) {
-          console.error("Error while adding expense:", error);
-          setError(error as any); // Set error state if fetch fails
+      } else {
+        setError(data); // Set error state if request fails
       }
+    } catch (error) {
+      console.error("Error while adding expense:", error);
+      setError(error as any); // Set error state if fetch fails
+    }
   };
 
   useEffect(() => {
-      handleExpenseSubmit();
+    handleExpenseSubmit();
   }, [token]);
 
   console.log("Error while adding expense:", error);
@@ -239,41 +240,46 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
   if (!isOpen) return null;
   return (
     <>
-      {responseData && <SuccessNotification successResponse={responseData } />}
-      {error && <ErrorNotification error={ error} />}
-      <div className='pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 right-8 w-4/5 items-center absolute bottom-0 flex flex-col mx-auto '>
-        <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
-        <form
-          onSubmit={handleExpenseSubmit}
-          className='w-full px-8'
-        >
-          <div className='flex gap-4 flex-col'>
-            <label className='tracking-wide font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
-            <input
-              className='border-none px-2 py-4 outline-none rounded-2xl'
-              type="text"
-              value={formData.expenseTitle}
-              name='expenseTitle'
-              required
-              onChange={handleChange}
-              placeholder='eg.Food' />
-          </div>
-          <div className='flex gap-4  flex-col mt-4'>
-            <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
-            <input
-              className='border-none px-2 py-4 outline-none rounded-2xl'
-              type="number"
-              value={formData.amount}
-              name='amount'
-              onChange={handleChange}
-              required
-              placeholder='eg.2500' />
-          </div>
-          <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
-            <button onClick={onClose} className="active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</button>
-            <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
-          </div>
-        </form>
+      {responseData && <SuccessNotification successResponse={responseData} />}
+      {error && <ErrorNotification error={error} />}
+      <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
+        {/* Overlay */}
+        <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
+
+        <div className='relative pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
+          <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
+          <form
+            onSubmit={handleExpenseSubmit}
+            className='w-full px-8'
+          >
+            <div className='flex gap-4 flex-col'>
+              <label className='tracking-wide font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
+              <input
+                className='border-none px-2 py-4 outline-none rounded-2xl'
+                type="text"
+                value={formData.expenseTitle}
+                name='expenseTitle'
+                required
+                onChange={handleChange}
+                placeholder='eg.Food' />
+            </div>
+            <div className='flex gap-4  flex-col mt-4'>
+              <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
+              <input
+                className='border-none px-2 py-4 outline-none rounded-2xl'
+                type="number"
+                value={formData.amount}
+                name='amount'
+                onChange={handleChange}
+                required
+                placeholder='eg.2500' />
+            </div>
+            <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
+              <button onClick={onClose} className="active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</button>
+              <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   )
