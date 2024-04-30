@@ -106,6 +106,15 @@ export default function Home() {
     setIsPopupOpen((prevState) => !prevState);
   };
 
+  const getFormattedDate = (unformattedDate: any) => {
+    let joinedDate = new Date(unformattedDate);
+    const day = joinedDate.getDate();
+    const month = joinedDate.toLocaleString('default', { month: 'short' }); // Get month abbreviation
+    const weekday = joinedDate.toLocaleString('default', { weekday: 'short' }); // Get weekday abbreviation
+
+    return `${weekday}, ${month} ${day}`;
+  };
+
   return (
     <>
       {error && <ErrorNotification error={error} />}
@@ -152,7 +161,7 @@ export default function Home() {
                   <span className='text-xl mr-2'></span>
                   {expense.expenseTitle}
                 </div>
-                <div className='text-xs text-center tracking-widest my-auto'> [ March 20 ]</div>
+                <div className='text-xs text-center tracking-widest my-auto'> {getFormattedDate(expense.createdAt)} </div>
                 <div className='text-lg'>
                   - <span className='text-red-500 dark:text-orange-500'>Rs. </span>
                   {expense.amount}
@@ -197,13 +206,44 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
 
   const [formData, setFormData] = useState({
     expenseTitle: '',
-    amount: ''
+    amount: '',
+    category: ''
   });
+  // const handleChange = (e: any) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
+
+  const [customCategory, setCustomCategory] = useState('');
+  const [categories, setCategories] = useState([
+    { value: 'education', label: '📚 Education' },
+    { value: 'transportation', label: '🚌 Transportation' },
+    { value: 'foods', label: '🍲 Foods' },
+    { value: 'health', label: '🩺 Health' },
+    { value: 'tech', label: '🖥️ Tech' },
+    { value: 'furniture', label: ' 🛋️ Furniture' }
+  ]);
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleCustomCategoryChange = (e: any) => {
+    setCustomCategory(e.target.value);
+  };
+
+  const handleAddCustomCategory = () => {
+    if (customCategory.trim() !== '') {
+      const newCategory = {
+        value: customCategory.toLowerCase(),
+        label: customCategory
+      };
+      setCategories([...categories, newCategory]);
+      setFormData({ ...formData, category: customCategory });
+      setCustomCategory('');
+    }
+  };
 
   const handleExpenseSubmit = async () => {
     try {
@@ -220,7 +260,8 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
         setResponseData(data);
         setFormData({
           expenseTitle: '',
-          amount: ''
+          amount: '',
+          category: ''
         });
       } else {
         setError(data); // Set error state if request fails
@@ -231,13 +272,11 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
     }
   };
 
-  useEffect(() => {
-    handleExpenseSubmit();
-  }, [token]);
-
   console.log("Error while adding expense:", error);
   console.log("Successfully added:", responseData);
   if (!isOpen) return null;
+
+  console.log("Form data on add expense : ", formData);
   return (
     <>
       {responseData && <SuccessNotification successResponse={responseData} />}
@@ -246,7 +285,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
-        <div className='relative pop-up rounded-xl bg-[#eff0e4] gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
+        <div className='relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
           <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
           <form
             onSubmit={handleExpenseSubmit}
@@ -255,7 +294,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             <div className='flex gap-4 flex-col'>
               <label className='tracking-wide font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
               <input
-                className='border-none px-2 py-4 outline-none rounded-2xl'
+                className='border border-gray-300  p-2 outline-none rounded-2xl'
                 type="text"
                 value={formData.expenseTitle}
                 name='expenseTitle'
@@ -266,7 +305,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             <div className='flex gap-4  flex-col mt-4'>
               <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
               <input
-                className='border-none px-2 py-4 outline-none rounded-2xl'
+                className='border border-gray-300 p-2 outline-none rounded-2xl'
                 type="number"
                 value={formData.amount}
                 name='amount'
@@ -274,8 +313,22 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
                 required
                 placeholder='eg.2500' />
             </div>
+            <div className='flex gap-2 flex-col mt-4'>
+              <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="category">Category</label>
+              <select className='p-2 rounded-xl bg-white outline-none border border-gray-300' required onChange={handleChange} value={formData.category} name="category">
+                <option value="">Select</option>
+                {categories.map((category) => (
+                  <option key={category.value} value={category.value}>{category.label}</option>
+                ))}
+              </select>
+              <div className='flex items-center justify-center gap-2 mb-4 '>
+                <input type="text" value={customCategory} onChange={handleCustomCategoryChange} className='p-1 rounded-lg bg-white outline-none border focus:border-gray-400 border-gray-300' placeholder="Custom category (eg.Clothes) " />
+                <div onClick={handleAddCustomCategory} className='cursor-pointer text-center active:bg-green-600 px-2 py-1 w-full rounded-lg bg-blue-500 text-white mx-auto '>Add </div>
+              </div>
+            </div>
+
             <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
-              <button onClick={onClose} className="active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</button>
+              <div onClick={onClose} className=" cursor-pointer active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</div>
               <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
             </div>
           </form>
