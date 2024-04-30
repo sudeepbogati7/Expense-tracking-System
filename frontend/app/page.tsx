@@ -98,6 +98,13 @@ export default function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  const handleShowFilters = () => {
+    setShowFilters(!showFilters);
+  }
+
   // side bar for user Info
   function toggleSideBar() {
     setOpen(!open)
@@ -114,6 +121,16 @@ export default function Home() {
 
     return `${weekday}, ${month} ${day}`;
   };
+
+
+  const [categories, setCategories] = useState([
+    { value: 'education', label: '📚 Education' },
+    { value: 'transportation', label: '🚌 Transportation' },
+    { value: 'foods', label: '🍲 Foods' },
+    { value: 'health', label: '🩺 Health' },
+    { value: 'tech', label: '🖥️ Tech' },
+    { value: 'furniture', label: ' 🛋️ Furniture' }
+  ]);
 
   return (
     <>
@@ -140,29 +157,60 @@ export default function Home() {
         </div>
 
         {/* List of the expenses */}
-        <div className='shadow-gray-500/10 shadow-xl text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-evenly px-6 py-4  '>
-          <span>This Month's total </span>
+        <div className='shadow-gray-500/10 shadow-xl text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-center gap-6  px-6 py-4  '>
+          {/* <span>This Month's total </span>
           <div className='border-b-2 border-gray-400 dark:border-gray-500'> <span className='text-orange-500'> Rs. </span>
             {expenseData && expenseData.length > 0 ? (
               expenseData.reduce((total: any, expense: any) => total + expense.amount, 0)
             ) : (
               "0"
             )}
+          </div> */}
+          <label htmlFor="category">Filter category : </label>
+          <div>
+            <div
+              onMouseEnter={() => setShowFilters(true)}
+              onMouseLeave={() => setShowFilters(false)}
+              className={`group flex items-center bg-indigo-300 text-gray-600 dark:bg-indigo-500  dark:text-white cursor-pointer border border-gray-400  px-2 rounded-xl `}>
+              <span className='text-sm'>Select Category</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                stroke="currentColor" className="h-6 w-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+            <div
+              onMouseEnter={() => setShowFilters(true)}
+              onMouseLeave={() => setShowFilters(false)}
+              className={`rounded-lg border absolute bg-indigo-100 pt-2 dark:bg-gray-800 dark:text-gray-100  border-gray-400 p-2 ${showFilters ? 'block' : 'hidden'}`}>
+              {categories.map(category => (
+                <div className='px-2 flex gap-1' key={category.value}>
+                  <input
+                    className='cursor-pointer'
+                    type="checkbox"
+                    id={category.value}
+                    name="category"
+                    value={category.value} />
+                  <label className=' cursor-pointer hover:bg-white w-full text-gray-500 hover:text-gray-900 transition-all duration-200 ease-in-out  dark:hover:text-gray-100 dark:hover:bg-gray-900' htmlFor={category.value}>{category.label}</label>
+                </div>
+              ))}
+            </div>
           </div>
+
         </div>
-        <div className='flex flex-col gap-4 w-full h-2/4 overflow-y-scroll pb-24'>
+        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-24'>
           {expenseData && expenseData.length > 0 ? (
             expenseData.map((expense, index) => (
               <li
                 key={index}
-                className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-8 py-4 dark:text-gray-300 dark:border-gray-700'
+                className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-4 py-4 dark:text-gray-300 dark:border-gray-700'
               >
                 <div className='font-bold text-base'>
-                  <span className='text-xl mr-2'></span>
+                  <span className='text-base mr-2'></span>
                   {expense.expenseTitle}
                 </div>
+                <div className='text-sm text-center my-auto bg-indigo-200 rounded-xl px-2 dark:bg-indigo-500'>{expense.category}</div>
                 <div className='text-xs text-center tracking-widest my-auto'> {getFormattedDate(expense.createdAt)} </div>
-                <div className='text-lg'>
+                <div className='text-base'>
                   - <span className='text-red-500 dark:text-orange-500'>Rs. </span>
                   {expense.amount}
                 </div>
