@@ -1,7 +1,11 @@
 import { Response, Request, NextFunction } from "express";
-import Joi from 'joi';
+import Joi from "joi";
 
-export const validateUserRegistration = (req: Request, res: Response, next: NextFunction) => {
+export const validateUserRegistration = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const schema = Joi.object({
         fullName: Joi.string().min(5).max(50).required(),
         email: Joi.string().email().required(),
@@ -12,23 +16,30 @@ export const validateUserRegistration = (req: Request, res: Response, next: Next
     const { error } = schema.validate(req.body);
 
     if (error) {
-        return res.status(400).json({ error: error.details.map((detail) => detail.message) });
+        return res
+            .status(400)
+            .json({ error: error.details.map((detail) => detail.message) });
     }
 
     next();
 };
 
-export const validateExpenseInputs = (req: Request, res: Response, next: NextFunction) => {
+export const validateExpenseInputs = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const schema = Joi.object({
-        expenseTitle: Joi.string().min(2).max(50).required(),
-        amount: Joi.number().required(),
-        category: Joi.string().required()
+        expenseTitle: Joi.string().min(2).max(20).required(),
+        amount: Joi.number().min(5).max(1000000).required(),
+        category: Joi.string().required(),
     });
 
     const { error } = schema.validate(req.body);
-    if (error) return res.status(400).json({
-        success: false,
-        error: error.details.map((detail) => detail.message)
-    });
+    if (error)
+        return res.status(400).json({
+            success: false,
+            error: error.details.map((detail) => detail.message),
+        });
     next();
 };
