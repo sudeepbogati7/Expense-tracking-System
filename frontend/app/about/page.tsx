@@ -22,7 +22,7 @@ export default function AboutMe() {
                 <button className='border border-gray-400 px-2 rounded-lg text-center hover:bg-orange-400 hover:text-white text-base active:bg-orange-800 active:text-white transition-all duration-300 ease'><a href="/"> Home </a> </button>
             </header>
 
-            <div className='absolute border-b-2 bg-indigo-200 px-2 rounded-xl  border-orange-500 ml-4  mt-6 transform -rotate-12'>About me </div>
+            <div className='absolute border-b-2 bg-indigo-200 px-2 rounded-xl hover:text-gray-600 cursor-pointer transform hover:scale-110 transition-all ease duration-200 border-orange-500 ml-4  mt-6 transform -rotate-12'>About me </div>
             <div className="mt-14 container flex items-center w-full mx-auto py-4 px-2 my-4 flex-col mx-auto border-b border-gray-400 ">
                 <div className='flex gap-6 items-center p-2 border-b-2 border-gray-400'>
                     <div className='flex flex-col items-center '>

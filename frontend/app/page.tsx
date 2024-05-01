@@ -98,6 +98,13 @@ export default function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // Popup for editing expense
+  const [editPopupOpen, setEditPopupOpen] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  const toggleEditPopup = (expense: any) => {
+    setSelectedExpense(expense)
+    setEditPopupOpen(true);
+  }
 
   const [showFilters, setShowFilters] = useState(false);
 
@@ -123,15 +130,27 @@ export default function Home() {
   };
 
 
-  const [categories, setCategories] = useState([
-    { value: 'education', label: '📚 Education' },
-    { value: 'transportation', label: '🚌 Transportation' },
-    { value: 'foods', label: '🍲 Foods' },
-    { value: 'health', label: '🩺 Health' },
-    { value: 'tech', label: '🖥️ Tech' },
-    { value: 'furniture', label: ' 🛋️ Furniture' }
-  ]);
+  // const [categories, setCategories] = useState([
+  //   { value: 'education', label: '📚 Education' },
+  //   { value: 'transportation', label: '🚌 Transportation' },
+  //   { value: 'foods', label: '🍲 Foods' },
+  //   { value: 'health', label: '🩺 Health' },
+  //   { value: 'tech', label: '🖥️ Tech' },
+  //   { value: 'furniture', label: ' 🛋️ Furniture' }
+  // ]);
 
+
+  function extractUniqueCategories(expenseData: any) {
+    const uniqueCategories = new Set();
+    (expenseData as any)?.forEach((expense: any) => {
+      uniqueCategories.add(expense.category);
+    });
+    return Array.from(uniqueCategories);
+  }
+
+  const categories = extractUniqueCategories(expenseData);
+
+  console.log("categrores : ", categories);
   return (
     <>
       {error && <ErrorNotification error={error} />}
@@ -145,7 +164,7 @@ export default function Home() {
           <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
           <div className='flex justify-center align-center'>
             <span className='text-2xl text-orange-600  mb-14 my-auto'>Rs. </span>
-            <div className='text-7xl font-bold  p-4'>
+            <div className={`p-4 ${expenseData && expenseData.length > 0 ? (expenseData.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
               {expenseData && expenseData.length > 0 ? (
                 expenseData.reduce((total: any, expense: any) => total + expense.amount, 0)
               ) : (
@@ -158,14 +177,6 @@ export default function Home() {
 
         {/* List of the expenses */}
         <div className='shadow-gray-500/10 shadow-xl text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-center gap-6  px-6 py-4  '>
-          {/* <span>This Month's total </span>
-          <div className='border-b-2 border-gray-400 dark:border-gray-500'> <span className='text-orange-500'> Rs. </span>
-            {expenseData && expenseData.length > 0 ? (
-              expenseData.reduce((total: any, expense: any) => total + expense.amount, 0)
-            ) : (
-              "0"
-            )}
-          </div> */}
           <label htmlFor="category">Filter category : </label>
           <div>
             <div
@@ -181,45 +192,58 @@ export default function Home() {
             <div
               onMouseEnter={() => setShowFilters(true)}
               onMouseLeave={() => setShowFilters(false)}
-              className={`rounded-lg border absolute bg-indigo-100 pt-2 dark:bg-gray-800 dark:text-gray-100  border-gray-400 p-2 ${showFilters ? 'block' : 'hidden'}`}>
-              {categories.map(category => (
-                <div className='px-2 flex gap-1' key={category.value}>
+              className={`rounded-lg border absolute bg-indigo-100 pt-2 dark:bg-gray-800 dark:text-gray-100 border-gray-400 p-2 ${showFilters ? 'block' : 'hidden'}`}
+            >
+              {categories.map((category : any) => (
+                <div className='px-2 flex gap-1' key={category}>
                   <input
                     className='cursor-pointer'
                     type="checkbox"
-                    id={category.value}
+                    id={category}
                     name="category"
-                    value={category.value} />
-                  <label className=' cursor-pointer hover:bg-white w-full text-gray-500 hover:text-gray-900 transition-all duration-200 ease-in-out  dark:hover:text-gray-100 dark:hover:bg-gray-900' htmlFor={category.value}>{category.label}</label>
+                    value={category}
+                  />
+                  <label
+                    className='cursor-pointer hover:bg-white w-full text-gray-500 hover:text-gray-900 transition-all duration-200 ease-in-out dark:hover:text-gray-100 dark:hover:bg-gray-900'
+                    htmlFor={category}
+                  >
+                    {category}
+                  </label>
                 </div>
               ))}
             </div>
+
           </div>
 
         </div>
-        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-24'>
+        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-4'>
           {expenseData && expenseData.length > 0 ? (
             expenseData.map((expense, index) => (
               <li
                 key={index}
                 className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-4 py-4 dark:text-gray-300 dark:border-gray-700'
               >
-                <div className='font-bold text-base'>
-                  <span className='text-base mr-2'></span>
-                  {expense.expenseTitle}
+                <div className='font-bold text-sm flex justify-left items-center gap-1 border-r border-gray-500 pr-1'>
+                  <span className='text-sm '>
+                    {expense.expenseTitle}
+                  </span>
+                  <span onClick={() => toggleEditPopup(expense)} className='cursor-pointer hover:bg-indigo-100 rounded-full active:scale-125 transition-all duration-200  dark:bg-gray-300 dark:active:bg-blue-300 '><Image src={'/edit.png'} width={14} height={14} alt='edit-ong'></Image></span>
                 </div>
-                <div className='text-sm text-center my-auto bg-indigo-200 rounded-xl px-2 dark:bg-indigo-500'>{expense.category}</div>
+                <div className='text-xs text-center h-fit w-fit my-auto bg-indigo-200 rounded-xl px-2 dark:bg-indigo-500'>{expense.category}</div>
                 <div className='text-xs text-center tracking-widest my-auto'> {getFormattedDate(expense.createdAt)} </div>
                 <div className='text-base'>
                   - <span className='text-red-500 dark:text-orange-500'>Rs. </span>
                   {expense.amount}
                 </div>
+                {selectedExpense && <EditPopup expenseData={selectedExpense} editPopupOpen={editPopupOpen} onclose={() => setEditPopupOpen(false)} />}
+
               </li>
             ))
           ) : (
             <span className="text-gray-700 px-8 mx-auto py-4 dark:text-gray-300"> No expenses added ! </span>
           )}
         </div>
+
 
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
@@ -247,8 +271,9 @@ export default function Home() {
   );
 }
 
-// popup
+//====================================================================Add popup====================================================================
 const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
 
@@ -265,7 +290,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
   const [customCategory, setCustomCategory] = useState('');
   const [categories, setCategories] = useState([
     { value: 'education', label: '📚 Education' },
-    { value: 'transportation', label: '🚌 Transportation' },
+    { value: 'transport', label: '🚌 Transport' },
     { value: 'foods', label: '🍲 Foods' },
     { value: 'health', label: '🩺 Health' },
     { value: 'tech', label: '🖥️ Tech' },
@@ -274,7 +299,12 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'category') {
+      const selectedCategory = categories.find(category => category.value === value);
+      setFormData({ ...formData, [name]: selectedCategory ? selectedCategory.label : value });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleCustomCategoryChange = (e: any) => {
@@ -311,6 +341,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
           amount: '',
           category: ''
         });
+        onClose()
       } else {
         setError(data); // Set error state if request fails
       }
@@ -334,7 +365,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
         <div className='relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
-          <span className='font-medium text-lg border-b-2 border-orange-500 px-2  my-4 '> Add Expense </span>
+          <span className='font-medium text-lg border-b-2 border-orange-500 px-2 '> Add Expense </span>
           <form
             onSubmit={handleExpenseSubmit}
             className='w-full px-8'
@@ -342,7 +373,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             <div className='flex gap-4 flex-col'>
               <label className='tracking-wide font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" >Title</label>
               <input
-                className='border border-gray-300  p-2 outline-none rounded-2xl'
+                className='border-2 focus:border-indigo-500 border-gray-300 dark:bg-gray-600 dark:focus:border-indigo-300   p-2 outline-none rounded-2xl'
                 type="text"
                 value={formData.expenseTitle}
                 name='expenseTitle'
@@ -353,7 +384,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             <div className='flex gap-4  flex-col mt-4'>
               <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="expenseTitle" >Amount (Rs.)</label>
               <input
-                className='border border-gray-300 p-2 outline-none rounded-2xl'
+                className='border-2 focus:border-indigo-500 border-gray-300 dark:bg-gray-600 dark:focus:border-indigo-300 p-2 outline-none rounded-2xl'
                 type="number"
                 value={formData.amount}
                 name='amount'
@@ -363,21 +394,21 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             </div>
             <div className='flex gap-2 flex-col mt-4'>
               <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="category">Category</label>
-              <select className='p-2 rounded-xl bg-white outline-none border border-gray-300' required onChange={handleChange} value={formData.category} name="category">
+              <select className='p-2 focus:border-indigo-500 dark:bg-gray-700 rounded-xl bg-white outline-none border-2 border-gray-300' required onChange={handleChange} value={formData.category} name="category">
                 <option value="">Select</option>
                 {categories.map((category) => (
-                  <option key={category.value} value={category.value}>{category.label}</option>
+                  <option key={category.value} value={category.label}>{category.label}</option>
                 ))}
               </select>
-              <div className='flex items-center justify-center gap-2 mb-4 '>
-                <input type="text" value={customCategory} onChange={handleCustomCategoryChange} className='p-1 rounded-lg bg-white outline-none border focus:border-gray-400 border-gray-300' placeholder="Custom category (eg.Clothes) " />
-                <div onClick={handleAddCustomCategory} className='cursor-pointer text-center active:bg-green-600 px-2 py-1 w-full rounded-lg bg-blue-500 text-white mx-auto '>Add </div>
+              <div className='flex items-center justify-center gap-2 mb-4  '>
+                <input type="text" value={customCategory} onChange={handleCustomCategoryChange} className='p-1 rounded-lg w-3/4 bg-white outline-none border-2 focus:border-gray-400 border-gray-300 dark:focus:border-indigo-500 dark:bg-gray-900' placeholder="Custom category (eg.Clothes) " />
+                <div onClick={handleAddCustomCategory} className='cursor-pointer text-center active:bg-green-600 w-1/4 px-2 py-1 w-full rounded-lg bg-blue-500 text-white mx-auto '>Add </div>
               </div>
             </div>
 
             <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
               <div onClick={onClose} className=" cursor-pointer active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</div>
-              <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
+              <button type='submit' className="cursor-pointer active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
             </div>
           </form>
         </div>
@@ -388,9 +419,164 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
 
 
 
+//====================================================================Edit popup====================================================================
+
+export function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
+  const router = useRouter();
+
+  const [customCategory, setCustomCategory] = useState('');
+  const [categories, setCategories] = useState([
+    { value: 'education', label: '📚 Education' },
+    { value: 'transportation', label: '🚌 Transportation' },
+    { value: 'foods', label: '🍲 Foods' },
+    { value: 'health', label: '🩺 Health' },
+    { value: 'tech', label: '🖥️ Tech' },
+    { value: 'furniture', label: ' 🛋️ Furniture' }
+  ]);
+
+  const [editTitle, setEditTitle] = useState(false);
+  const [editAmount, setEditAmount] = useState(false);
+  const [editCategory, setEditCategory] = useState(false);
+  const { responseData, setResponseData } = useResponseData();
+  const [error, setError] = useState(null);
+
+
+  const [formData, setFormData] = useState({
+    expenseTitle: expenseData.expenseTitle,
+    amount: expenseData.amount,
+    category: expenseData.category
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    if (name === 'category') {
+      const selectedCategory = categories.find(category => category.value === value);
+      setFormData({ ...formData, [name]: selectedCategory ? selectedCategory.label : value });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleExpenseSubmit = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/expenses/edit/${expenseData.expenseId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setResponseData(data);
+      } else {
+        setError(data);
+      }
+    } catch (error) {
+      console.error("Error while adding expense:", error);
+      setError(error as any);
+    }
+  };
+
+  const handleExpenseDelete = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/expenses/delete/${expenseData.expenseId}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setResponseData(data);
+        onclose();
+      }
+      else {
+        setError(data);
+      }
+    } catch (error) {
+      console.log("error while deleting expense : ", error)
+      setError(error as any)
+    }
+  }
+
+  console.log("Edit expense data ==> ", expenseData)
+  if (!editPopupOpen) return null;
+  return (
+    <>
+      <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
+        {/* Overlay */}
+        <div aria-hidden="true" className="fixed inset-0 bg-black opacity-10"></div>
+
+        <div className='relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
+          <span className='font-medium text-lg border-b-2 border-green-500 px-2  my-2 '> Edit Expense </span>
+          <button onClick={handleExpenseDelete} className='absolute bg-red-600 rounded-xl px-2 right-4 mt-2 text-white tex-sm cursor-pointer active:bg-red-800'>Delete</button>
+          <form
+            onSubmit={handleExpenseSubmit}
+            className='w-full px-8'
+          >
+            <div className='flex gap-4 flex-col'>
+              <label className='tracking-wide flex items-center gap-4 font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" ><span>Title</span> <span onClick={() => setEditTitle(true)} className='cursor-pointer border border-gray-400 px-1 text-xs 1 rounded-lg active:scale-110 transition-all dark:text-gray-200 dark:bg-gray-500  transform bg-blue-200 flex items-center gap-1 '>edit<Image src={'/edit.png'} width={12} height={12} alt='edit-ong'></Image></span> </label>
+              <input
+                className={`${editTitle ? "border-blue-300 border" : ""} border border-gray-300  p-2 outline-none rounded-2xl`}
+                type="text"
+                value={formData.expenseTitle}
+                name='expenseTitle'
+                required={editTitle}
+                disabled={!editTitle}
+                // readOnly={!editTitle}
+                onChange={handleChange}
+                placeholder='eg.Food' />
+            </div>
+            <div className='flex gap-4  flex-col mt-4'>
+              <label className='tracking-wide flex items-center gap-4 font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" ><span>Amount</span> <span onClick={() => setEditAmount(true)} className='cursor-pointer border text-xs border-gray-400 px-1 rounded-lg active:scale-110 transition-all dark:text-gray-200 dark:bg-gray-500  transform bg-blue-200 flex items-center gap-1 '>edit<Image src={'/edit.png'} width={12} height={12} alt='edit-ong'></Image></span> </label>
+              <input
+                className={`${editAmount ? "border-blue-300 border" : ""}  border border-gray-300 p-2 outline-none rounded-2xl`}
+                type="number"
+                value={formData.amount}
+                name='amount'
+                onChange={handleChange}
+                required={editAmount}
+                disabled={!editAmount}
+                readOnly={!editAmount}
+                placeholder='eg.2500' />
+            </div>
+            <div className='flex gap-2 flex-col mt-4'>
+              <label className='tracking-wide flex items-center gap-4 font-medium text-gray-600 dark:text-gray-200  w-fit pl-2' htmlFor="expenseTitle" ><span>Category</span> <span onClick={() => setEditCategory(true)} className='cursor-pointer text-xs border border-gray-400 px-1 rounded-lg active:scale-110 transition-all dark:text-gray-200 dark:bg-gray-500  transform bg-blue-200 flex items-center gap-1 '>edit<Image src={'/edit.png'} width={12} height={12} alt='edit-ong'></Image></span> </label>
+              <select
+                aria-readonly={!editCategory}
+                disabled={!editCategory}
+                required={editCategory}
+                onChange={handleChange}
+                className={`${editCategory ? "border-blue-300 border" : ""} p-2 rounded-xl bg-white outline-none dark:bg-gray-700 dark:text-gray-200 border border-gray-300`}
+                defaultValue={formData.category}
+                name="category">
+                <option value="">Select</option>
+                {categories.map((category) => (
+                  <option key={category.value} value={category.label}>{category.label}</option>
+                ))}
+              </select>
+              <div className='flex items-center justify-center gap-2 mb-4 '>
+                <input disabled={!editCategory} readOnly={!editCategory} type="text" value={customCategory} className={`${editCategory ? "border-blue-300 border" : ""} p-1 w-3/4 dark:bg-gray-700 rounded-lg bg-white outline-none border focus:border-gray-400 border-gray-300`} placeholder="Custom category (eg.Clothes)" />
+                <div className='cursor-pointer text-center active:bg-green-600 px-2 py-1  w-1/4 rounded-lg bg-blue-700 text-white mx-auto '>Add </div>
+              </div>
+            </div>
+
+            <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
+              <div onClick={onclose} className=" cursor-pointer active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</div>
+              <button type='submit' className="active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
 //slide bar
 export function SideBar({ open, setOpen, userData }: any) {
-
   // user created data in simple format
   let joinedDate = new Date((userData as any)?.user.createdAt)
   const formattedDate = joinedDate.toDateString();
