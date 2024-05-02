@@ -28,10 +28,11 @@ interface Expense {
 const token = localStorage.getItem('token');
 
 export default function Home() {
-
   const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
+
+
 
   // check for the token 
 
@@ -42,10 +43,10 @@ export default function Home() {
     const fetchData = async () => {
 
       try {
-        if (!token) {
-          router.push('/register');
-          return;
-        }
+        // if (!token) {
+        //   router.push('/register');
+        //   return;
+        // }
 
         // fetching user profile data
         const userResponse = await fetch('http://localhost:3001/api/user/profile', {
@@ -85,9 +86,6 @@ export default function Home() {
     fetchData();
   }, [token, router]);
 
-  console.log(error);
-  console.log("Expense data fetched :======> ", expenseData);
-  console.log("User data profile ========>", userData);
   // date
   const getCurrentDate = () => {
     const currentDate = new Date();
@@ -117,7 +115,7 @@ export default function Home() {
     setOpen(!open)
   }
   const togglePopup = () => {
-    setIsPopupOpen((prevState) => !prevState);
+    setIsPopupOpen(!isPopupOpen);
   };
 
   const getFormattedDate = (unformattedDate: any) => {
@@ -130,16 +128,6 @@ export default function Home() {
   };
 
 
-  // const [categories, setCategories] = useState([
-  //   { value: 'education', label: '📚 Education' },
-  //   { value: 'transportation', label: '🚌 Transportation' },
-  //   { value: 'foods', label: '🍲 Foods' },
-  //   { value: 'health', label: '🩺 Health' },
-  //   { value: 'tech', label: '🖥️ Tech' },
-  //   { value: 'furniture', label: ' 🛋️ Furniture' }
-  // ]);
-
-
   function extractUniqueCategories(expenseData: any) {
     const uniqueCategories = new Set();
     (expenseData as any)?.forEach((expense: any) => {
@@ -150,7 +138,24 @@ export default function Home() {
 
   const categories = extractUniqueCategories(expenseData);
 
-  console.log("categrores : ", categories);
+  // checked categories 
+  const [checkedCategories, setCheckedCategories] = useState<string[]>([]);
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    if (event.target.checked) {
+      setCheckedCategories((prevState) => [...prevState, value]);
+    } else {
+      setCheckedCategories((prevState: any) => prevState.filter((item: any) => item !== value));
+    }
+  };
+
+  let filteredExpenses = checkedCategories.length > 0 ?
+    (expenseData as any)?.filter((expense: any) => checkedCategories.includes(expense.category)) : expenseData;
+
+  console.log("Checked Categories : ", checkedCategories)
+  console.log("Filtered expenses : ", filteredExpenses)
+
+  const [animated, setAnimated] = useState(false);
   return (
     <>
       {error && <ErrorNotification error={error} />}
@@ -162,11 +167,11 @@ export default function Home() {
         {/* Total Expense Viewer */}
         <div className='flex flex-col border-b-4 border-gray-200 dark:border-gray-600  h-38 w-full mx-auto '>
           <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
-          <div className='flex justify-center align-center'>
+          <div className='flex justify-center align-center animate-popup'>
             <span className='text-2xl text-orange-600  mb-14 my-auto'>Rs. </span>
-            <div className={`p-4 ${expenseData && expenseData.length > 0 ? (expenseData.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
-              {expenseData && expenseData.length > 0 ? (
-                expenseData.reduce((total: any, expense: any) => total + expense.amount, 0)
+           <div className={`p-4 ${filteredExpenses && filteredExpenses.length > 0 ? 'animate-slide-in' : ''} ${filteredExpenses && filteredExpenses.length > 0 ? (filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
+              {filteredExpenses && filteredExpenses.length > 0 ? (
+                filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0)
               ) : (
                 "0"
               )}
@@ -176,14 +181,14 @@ export default function Home() {
         </div>
 
         {/* List of the expenses */}
-        <div className='shadow-gray-500/10 shadow-xl text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-center gap-6  px-6 py-4  '>
-          <label htmlFor="category">Filter category : </label>
-          <div>
+        <div className='shadow-gray-500/10 shadow-xl flex items-center justify-around text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-center gap-6  px-6 py-4  '>
+          <div className='flex gap-4 '>
+            <label htmlFor="category">Filter category : </label>
             <div
               onMouseEnter={() => setShowFilters(true)}
               onMouseLeave={() => setShowFilters(false)}
               className={`group flex items-center bg-indigo-300 text-gray-600 dark:bg-indigo-500  dark:text-white cursor-pointer border border-gray-400  px-2 rounded-xl `}>
-              <span className='text-sm'>Select Category</span>
+              <span className='text-xs text-white'>Select Category</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                 stroke="currentColor" className="h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -192,16 +197,18 @@ export default function Home() {
             <div
               onMouseEnter={() => setShowFilters(true)}
               onMouseLeave={() => setShowFilters(false)}
-              className={`rounded-lg border absolute bg-indigo-100 pt-2 dark:bg-gray-800 dark:text-gray-100 border-gray-400 p-2 ${showFilters ? 'block' : 'hidden'}`}
+              className={`rounded-lg absolute animate-popup mt-6 mx-auto right-1/2 bg-indigo-100 pt-2 dark:bg-gray-800 dark:text-gray-100 border-gray-400 p-2 ${showFilters ? 'block' : 'hidden'}`}
             >
-              {categories.map((category : any) => (
-                <div className='px-2 flex gap-1' key={category}>
+              {categories.map((category: any) => (
+                <div className='px-2 flex gap-1 ' key={category}>
                   <input
                     className='cursor-pointer'
                     type="checkbox"
-                    id={category}
                     name="category"
                     value={category}
+                    id={category}
+                    onChange={handleCheckboxChange}
+                    checked={(checkedCategories as any)?.includes(category)}
                   />
                   <label
                     className='cursor-pointer hover:bg-white w-full text-gray-500 hover:text-gray-900 transition-all duration-200 ease-in-out dark:hover:text-gray-100 dark:hover:bg-gray-900'
@@ -212,16 +219,16 @@ export default function Home() {
                 </div>
               ))}
             </div>
-
           </div>
+          <button onClick={() => setCheckedCategories([])} className='bg-green-600 text-white text-xs px-2 active:scale-125 transform transition-all duration-300 ease-in-out rounded-xl py-1'>Clear filters </button>
 
         </div>
-        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-4'>
-          {expenseData && expenseData.length > 0 ? (
-            expenseData.map((expense, index) => (
+        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-4 animate-fade-in'>
+          {filteredExpenses && filteredExpenses.length > 0 ? (
+            filteredExpenses.map((expense: any, index: any) => (
               <li
                 key={index}
-                className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-4 py-4 dark:text-gray-300 dark:border-gray-700'
+                className='mt-4 text-gray-700 flex justify-between border-b border-gray-300 px-4 py-4 dark:text-gray-300 dark:border-gray-700 animate-slide-in '
               >
                 <div className='font-bold text-sm flex justify-left items-center gap-1 border-r border-gray-500 pr-1'>
                   <span className='text-sm '>
@@ -245,7 +252,7 @@ export default function Home() {
         </div>
 
 
-        <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} />
+        <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} setIsOpen={setIsPopupOpen} />
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
         {/* footer section */}
         <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
@@ -253,8 +260,8 @@ export default function Home() {
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </Link>
           <button
-            className="active:bg-orange-300 ease active:text-black transition-all duration-100 button my-auto"
-            onClick={togglePopup}
+            className="active:bg-orange-300 ease active:text-black transition-all duration-300 button my-auto"
+            onClick={() => setIsPopupOpen(true)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
             <span className="lable">Add</span>
@@ -272,7 +279,7 @@ export default function Home() {
 }
 
 //====================================================================Add popup====================================================================
-const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
   const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
@@ -294,7 +301,13 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
     { value: 'foods', label: '🍲 Foods' },
     { value: 'health', label: '🩺 Health' },
     { value: 'tech', label: '🖥️ Tech' },
-    { value: 'furniture', label: ' 🛋️ Furniture' }
+    { value: 'furniture', label: ' 🛋️ Furniture' },
+    { value: 'housing', label: '🏠 Housing' },
+    { value: 'saving', label: '💰 Savings and Investments' },
+    { value: 'entertainment', label: '🎉 Entertainment' },
+    { value: 'clothing', label: '👔 Clothing' },
+    { value: 'accessories', label: '💍 Accessories' },
+
   ]);
 
   const handleChange = (e: any) => {
@@ -364,7 +377,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
-        <div className='relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
+        <div className={`relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto ${!isOpen ? 'animate-popup' : 'animate-popup'}`}>
           <span className='font-medium text-lg border-b-2 border-orange-500 px-2 '> Add Expense </span>
           <form
             onSubmit={handleExpenseSubmit}
@@ -392,9 +405,9 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
                 required
                 placeholder='eg.2500' />
             </div>
-            <div className='flex gap-2 flex-col mt-4'>
+            <div className='flex gap-2 flex-col mt-4 '>
               <label className='tracking-wide font-medium dark:text-gray-200 text-gray-600 w-fit pl-2' htmlFor="category">Category</label>
-              <select className='p-2 focus:border-indigo-500 dark:bg-gray-700 rounded-xl bg-white outline-none border-2 border-gray-300' required onChange={handleChange} value={formData.category} name="category">
+              <select className='p-2 focus:border-indigo-500 dark:bg-gray-700 rounded-xl bg-white outline-none border-2 border-gray-300 ' required onChange={handleChange} value={formData.category} name="category">
                 <option value="">Select</option>
                 {categories.map((category) => (
                   <option key={category.value} value={category.label}>{category.label}</option>
@@ -407,7 +420,7 @@ const AddPopUp: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, 
             </div>
 
             <div className="flex mt-2 max-w-sm items-center justify-between gap-4 p-4  mx-auto ">
-              <div onClick={onClose} className=" cursor-pointer active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</div>
+              <div onClick={() => setIsOpen(false)} className=" cursor-pointer active:bg-white  py-2.5  px-6 border rounded-lg text-sm font-medium bg-gray-300 text-teal-900">Cancel</div>
               <button type='submit' className="cursor-pointer active:bg-green-400 transition-all duration-200 ease py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">Confirm</button>
             </div>
           </form>
@@ -510,7 +523,7 @@ export function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-10"></div>
 
-        <div className='relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto '>
+        <div className={`relative animate-popup rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto  `}>
           <span className='font-medium text-lg border-b-2 border-green-500 px-2  my-2 '> Edit Expense </span>
           <button onClick={handleExpenseDelete} className='absolute bg-red-600 rounded-xl px-2 right-4 mt-2 text-white tex-sm cursor-pointer active:bg-red-800'>Delete</button>
           <form
