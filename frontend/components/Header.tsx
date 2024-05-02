@@ -15,15 +15,15 @@ export default function Header() {
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     return (
         <header className="h-16  flex align-center shadow-gray-500/10 shadow-md justify-between w-full p-4 dark:shadow-gray-500/30">
-            <span className="my-auto active:scale-125 transition-all duration-300 transform ">
+            <span className=" my-auto active:scale-125 transition-all duration-300 transform ">
                 <ThemeSwitcher />
             </span>
             <Link href={"/"}>
                 {" "}
-                <div className="tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
-                    <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-400">my </span>
-                    <span className="text-3xl text-orange-600"> X</span>
-                    <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span> 
+                <div className="animate-scale-in tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
+                    <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-600 ">my </span>
+                    <span className="text-3xl text-orange-600 "> X</span>
+                    <span className="tracking-widest text-base font-normal border-t-2 border-gray-300 hover:border-orange-500 transition-all duration--900 ease-linear"> penses</span> 
                 </div>
             </Link>
             <div onClick={handleLogoutClick} className=" transition-all duration-300 Btn my-auto">

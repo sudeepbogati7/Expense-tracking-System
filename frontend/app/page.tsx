@@ -256,11 +256,11 @@ export default function Home() {
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
         {/* footer section */}
         <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
-          <Link href={'/dashboard'} className='bg-orange-200 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
+          <Link href={'/dashboard'} className=' animate-scale-in bg-orange-200 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </Link>
           <button
-            className="active:bg-orange-300 ease active:text-black transition-all duration-300 button my-auto"
+            className="animate-popup active:bg-orange-300 ease active:text-black transition-all duration-300 button my-auto"
             onClick={() => setIsPopupOpen(true)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
@@ -269,7 +269,7 @@ export default function Home() {
           <SideBar userData={userData} open={open} setOpen={setOpen} />
           <button
             onClick={toggleSideBar}
-            className='bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
+            className='animate-scale-in bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
             <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
           </button>
         </footer>
@@ -377,7 +377,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
-        <div className={`relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto ${!isOpen ? 'animate-popup' : 'animate-popup'}`}>
+        <div className={`relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto animate-popup`}>
           <span className='font-medium text-lg border-b-2 border-orange-500 px-2 '> Add Expense </span>
           <form
             onSubmit={handleExpenseSubmit}

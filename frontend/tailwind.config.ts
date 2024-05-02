@@ -13,6 +13,7 @@ const config: Config = {
         'popup': 'popup 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'slide-in': 'slide-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'slide-out': 'slide-out 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'scale-in': 'scale-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       },
       keyframes: {
         popup: {
@@ -26,6 +27,10 @@ const config: Config = {
         'slide-out': {
           '0%': { opacity: '1', transform: 'translateY(0)' },
           '100%': { opacity: '0', transform: 'translateY(-100%)' },
+        },
+        'scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0.5)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
         },
       },
       colors: {
