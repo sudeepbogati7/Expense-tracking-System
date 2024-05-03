@@ -25,9 +25,8 @@ export default function AboutMe() {
                 <button className='border border-gray-400 px-2 rounded-lg text-center hover:bg-orange-400 hover:text-white text-base active:bg-orange-800 active:text-white transition-all duration-300 ease'><a href="/"> Home </a> </button>
             </header>
 
-            <div className='absolute border-b-2 bg-indigo-200 px-2 rounded-xl hover:text-gray-600 cursor-pointer dark:bg-gray-700 dark:text-gray-100 transform hover:scale-110 transition-all ease duration-200 border-orange-500 ml-4  mt-6 transform -rotate-12'>About me </div>
             <div className="mt-14 container flex items-center w-full mx-auto py-4 px-2 my-4 flex-col mx-auto border-b border-gray-400 ">
-                <div className='flex gap-6 items-center p-2 border-b-2 border-gray-400'>
+                <div className='flex gap-6 items-center p-2 border-b-2 border-gray-400  '>
                     <div className='flex flex-col items-center '>
                         <div className='font-semibold tracking-wide text-xl border-b border-orange-400 text-orange-600 '>Sudeep Bogati</div>
                         <span className='text-xs font-medium'>Software Engineer</span>
@@ -35,7 +34,7 @@ export default function AboutMe() {
                     </div>
                     <div className='border-2 border-[#c97534] w-fit h-fit rounded-l-xl overflow-hidden'><Image src={'/about.jpg'} width={150} height={150} alt='about-me-image' style={{ objectFit: 'cover' }}></Image></div>
                 </div>
-                <p className='w-4/5 w-full text-sm px-2 py-4 tracking-wide'> Hello, This is Sudeep Bogati,a passionate Software Engineer from Nepal, passionate about using technology to solve problems and create innovative solutions. I'm skilled in applying my engineering knowledge to design, develop, and maintain software applications. With a strong foundation in <span className='font-medium '> TypeScript </span>, <span className='font-medium '> NEXT.js </span>, <span className='font-medium'> NODE.js </span> , I'm eager to contribute to projects that make a positive impact.</p>
+                <p className='w-4/5 w-full text-sm px-2 py-4 tracking-wide md:w-4/5 xl:w-1/2'> Hello, This is Sudeep Bogati,a passionate Software Engineer from Nepal, passionate about using technology to solve problems and create innovative solutions. I'm skilled in applying my engineering knowledge to design, develop, and maintain software applications. With a strong foundation in <span className='font-medium '> TypeScript </span>, <span className='font-medium '> NEXT.js </span>, <span className='font-medium'> NODE.js </span> , I'm eager to contribute to projects that make a positive impact.</p>
                 {/* social links */}
                 <div className="social-buttons dark:bg-gray-500">
                     <Link href="https://github.com/sudeepbogati7" className="social-button github">
@@ -82,10 +81,10 @@ export default function AboutMe() {
                 </div>
 
             </div>
-            <div className='flex flex-col px-4'>
+            <div className='flex items-left w-full md:w-2/3  xl:w-1/2  mx-auto flex-col px-4'>
                 <h1 className='text-lg font-semibold border-b-2 mx-auto w-fit border-orange-400'> About Expense Tracker Project</h1>
                 <span className='font-semibold my-2  text-base'>Introduction</span>
-                <span>This expense tracker application helps you manage your personal finances effectively. It provides features for:</span>
+                <span className=''>This expense tracker application helps you manage your personal finances effectively. It provides features for:</span>
                 <ul className='list-disc p-4 text-base'>
                     <li>Secure user authentication with JWT.</li>
                     <li>Visualizing spending patterns with charts and graphs.</li>
@@ -191,11 +190,11 @@ export default function AboutMe() {
                 <h2 className='text-lg font-semibold mb-2 font-bold border-b-2 border-orange-500 w-fit'>Conclusion</h2>
                 <p>This expense tracker empowers you to take control of your finances. With its user-friendly interface, powerful visualization tools, and secure authentication, you can make informed spending decisions and achieve your financial goals.</p>
             </div>
-            <footer className=' border-t border-gray-400 bg-gradient-to-t from-orange-200 via-indigo-200 to-gray-200 px-2 py-4 mt-8 flex flex-col items-center dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 '>
+            <footer className=' border-t border-gray-400 bg-gradient-to-t from-orange-200 via-gray-200 to-gray-200 px-2 py-4 mt-8 flex flex-col items-center dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 '>
                 <span className='text-gray-900 dark:text-gray-300 font-semibold'>Suggestions for improvement on </span>
                 <span className='text-sm dark:text-gray-300 tracking-widest'>sudeepbogati080@gmail.com</span>
                 <span className='text-base font-medium pt-2 mb-2  border-b border-gray-600 text-gray-800 dark:text-gray-300'> Find me on </span>
-                <ul className='flex gap-2 w-full items-center justify-around list-disc'>
+                <ul className='flex gap-14 w-full items-center justify-center  list-disc'>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://stackoverflow.com/users/24161634/sudeepbogati'}> StackOverflow </Link></li>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://github.com/sudeepbogati7'}>Github </Link></li>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://linkedin.com/in/sudeep-bogati'}> LinkedIn </Link></li>

@@ -160,16 +160,16 @@ export default function Home() {
     <>
       {error && <ErrorNotification error={error} />}
       {responseData && <SuccessNotification successResponse={responseData} />}
-      <div className="container h-screen w-full">
+      <Header />
+      <div className=" h-screen w-full md:w-2/3 xl:w-1/2 mx-auto">
         {/* header */}
-        <Header />
 
         {/* Total Expense Viewer */}
         <div className='flex flex-col border-b-4 border-gray-200 dark:border-gray-600  h-38 w-full mx-auto '>
           <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
           <div className='flex justify-center align-center animate-popup'>
             <span className='text-2xl text-orange-600  mb-14 my-auto'>Rs. </span>
-           <div className={`p-4 ${filteredExpenses && filteredExpenses.length > 0 ? 'animate-slide-in' : ''} ${filteredExpenses && filteredExpenses.length > 0 ? (filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
+            <div className={`p-4 ${filteredExpenses && filteredExpenses.length > 0 ? 'animate-slide-in' : ''} ${filteredExpenses && filteredExpenses.length > 0 ? (filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
               {filteredExpenses && filteredExpenses.length > 0 ? (
                 filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0)
               ) : (
@@ -223,7 +223,7 @@ export default function Home() {
           <button onClick={() => setCheckedCategories([])} className='bg-green-600 text-white text-xs px-2 active:scale-125 transform transition-all duration-300 ease-in-out rounded-xl py-1'>Clear filters </button>
 
         </div>
-        <div className='flex flex-col w-full h-2/4 overflow-y-scroll pb-4 animate-fade-in'>
+        <div className='flex flex-col w-full h-2/4 overflow-y-scroll animate-fade-in'>
           {filteredExpenses && filteredExpenses.length > 0 ? (
             filteredExpenses.map((expense: any, index: any) => (
               <li
@@ -255,7 +255,7 @@ export default function Home() {
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} setIsOpen={setIsPopupOpen} />
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
         {/* footer section */}
-        <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
+        <footer className='h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
           <Link href={'/dashboard'} className='border-b-4 border-blue-600  active:scale-125 transform animate-scale-in bg-orange-200 active:bg-orange-700 duration-300 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </Link>
@@ -377,7 +377,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
 
-        <div className={`relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto animate-popup`}>
+        <div className={`relative pop-up rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 md:w-2/3 xl:w-1/3 items-center flex flex-col mx-auto animate-popup`}>
           <span className='font-medium text-lg border-b-2 border-orange-500 px-2 '> Add Expense </span>
           <form
             onSubmit={handleExpenseSubmit}
@@ -521,9 +521,9 @@ export function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
     <>
       <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
         {/* Overlay */}
-        <div aria-hidden="true" className="fixed inset-0 bg-black opacity-10"></div>
+        <div aria-hidden="true" className="fixed inset-0 bg-black opacity-15"></div>
 
-        <div className={`relative animate-popup rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 items-center flex flex-col mx-auto  `}>
+        <div className={`relative animate-popup rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 md:w-2/3 xl:w-1/3 items-center flex flex-col mx-auto  `}>
           <span className='font-medium text-lg border-b-2 border-green-500 px-2  my-2 '> Edit Expense </span>
           <button onClick={handleExpenseDelete} className='absolute bg-red-600 rounded-xl px-2 right-4 mt-2 text-white tex-sm cursor-pointer active:bg-red-800'>Delete</button>
           <form
@@ -649,7 +649,7 @@ export function SideBar({ open, setOpen, userData }: any) {
                         Profile
                       </Dialog.Title>
                     </div>
-                    <div className='flex flex-col items-center bg-gray-200 dark:bg-gray-700 rounded-lg w-4/5 justify-center h-auto py-2'>
+                    <div className='flex flex-col items-center bg-blue-200 dark:bg-gray-700 rounded-lg w-4/5 justify-center h-auto py-2'>
                       <div className='bg-orange-600 rounded-full mt-4 w-fit h-fit'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" className="bi bi-person-fill text-white dark:text-indigo-300" viewBox="0 0 16 16">
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
@@ -659,7 +659,24 @@ export function SideBar({ open, setOpen, userData }: any) {
                       <span className='text-xs p-1 italic '>{userData ? userData.user.email : "nodata@user.com"}</span>
                       <div className='text-xs tracking-wide p-2'>Joined on : {formattedDate}</div>
                     </div>
-                    <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
+
+
+                    <div>
+                      <h1 className='text-center px-2 font-medium border-gray-200 border-b-2 m-4 w-fit mx-auto'> My Expense Logs </h1>
+                      <div className='mx-2 p-2 h-96 overflow-y-scroll bg-gray-200'>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Edited : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
+                       </div>
+                    </div>
+
+
+
+                    <div className=' flex flex-wrap items-center justify-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full py-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
                       <span className='border-b border-gray-200 w-fit mx-auto'>By Sudeep Bogati</span>
                       <Link href={'/about'} className=' text-blue-500 hover:underline w-fit'>About</Link>
                       <span className='text-sm'>info@sudipbogati.com.np</span>

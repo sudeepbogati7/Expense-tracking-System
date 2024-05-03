@@ -14,7 +14,7 @@ export default function Header() {
     };
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     return (
-        <header className="h-16  flex align-center shadow-gray-500/10 shadow-md justify-between w-full p-4 dark:shadow-gray-500/30">
+        <header className="h-16  flex align-center shadow-gray-500/10 shadow-md justify-between w-full p-4  dark:shadow-gray-500/30">
             <span className=" my-auto active:scale-125 transition-all duration-300 transform ">
                 <ThemeSwitcher />
             </span>
