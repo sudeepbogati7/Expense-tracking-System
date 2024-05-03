@@ -1,53 +1,221 @@
 'use client';
-import 'tailwindcss/tailwind.css';
+
 import '../page.css';
-import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
+import { Fragment } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import 'tailwindcss/tailwind.css';
+import { useResponseData } from '@/components/ResponseDataContext';
+// components
+import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
+import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
+interface Expense {
+  expenseId: number;
+  expenseTitle: string;
+  amount: number;
+  userId: number;
+  createdAt: string;
+  // Add other properties if needed
+}
 const token = localStorage.getItem('token');
 
-export default function Dashboard() {
-    const [expenseData, setExpenseData] = useState(null);
-    const router = useRouter()
-    if (!token) router.push('/login');
-    useEffect(() => {
-        const fetchExpenses = async () => {
-            const respoonse = await fetch('http://localhost:3001/api/expenses/my-expenses', {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await respoonse.json();
-            if (!respoonse.ok) {
-                alert("Error while fetching your expenses :( ")
-            } else {
-                setExpenseData(data);
-            }
+export default function Home() {
+  const router = useRouter();
+  const { responseData, setResponseData } = useResponseData();
+  const [error, setError] = useState(null);
+
+
+
+  // check for the token 
+
+  const [userData, setUserData] = useState(null);
+  const [expenseData, setExpenseData] = useState<any[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      try {
+        if (!token) {
+          router.push('/register');
+          return;
         }
-        fetchExpenses()
-    });
-    return (
-        <div>
-            <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between w-full p-4 dark:shadow-gray-500/30 border dark:border-gray-600'>
-                <span className='my-auto'><ThemeSwitcher /></span>
-                <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>
-                <button className="Btn my-auto">
-                    <div className="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
-                    <div className="text">Logout</div>
-                </button>
-            </header>
-            <main className='text-center h-full'>
-                Graphs and charts
-                <br />
-                [ To DO ]
-            </main>
+        // fetching user profile data
+        const userResponse = await fetch('http://localhost:3001/api/user/profile', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        const userProfiledata = await userResponse.json();
+        if (userResponse.ok) {
+          setUserData(userProfiledata);
+        } else {
+          setError(userProfiledata);
+        }
 
+        // fetching user expenses data 
+        const expenseResponse = await fetch('http://localhost:3001/api/expenses/my-expenses', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const expenseData = await expenseResponse.json();
+        if (expenseResponse.ok) {
+          setExpenseData(expenseData.data);
+        } else {
+          setError(expenseData);
+        }
+      } catch (err: any) {
+        setError(err.message)
+      }
+    }
+    fetchData();
+  }, [token, router]);
 
-        </div>
-    )
+  // date
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    return currentDate.toDateString(); // You can customize the format as needed
+  };
 
+  // pop up for adding new expense
+  const [open, setOpen] = useState(false);
+
+  // side bar for user Info
+  function toggleSideBar() {
+    setOpen(!open)
+  }
+  
+  const getFormattedDate = (unformattedDate: any) => {
+    let joinedDate = new Date(unformattedDate);
+    const day = joinedDate.getDate();
+    const month = joinedDate.toLocaleString('default', { month: 'short' }); // Get month abbreviation
+    const weekday = joinedDate.toLocaleString('default', { weekday: 'short' }); // Get weekday abbreviation
+
+    return `${weekday}, ${month} ${day}`;
+  };
+
+    console.log("expensedata from dashboard : ", expenseData);
+  return (
+    <>
+        <Header />
+
+        <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
+          <Link href={'/dashboard'} className='border-b-4 border-blue-600 animate-scale-in bg-orange-500 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
+            <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
+          </Link>
+        <Link
+            href={'/'}      
+            className="border-b-4 border-blue-600 animate-scale-in active:scale-125 transform duration-300 ease-in-out flex items-center rounded-full w-fit px-2 bg-blue-300 "
+          >
+            <span className='w-fit h-fit '><Image src={'/home.png'} width={26} height={26} alt='home'></Image></span>
+          </Link>
+          <SideBar userData={userData} open={open} setOpen={setOpen} />
+          <button
+            onClick={toggleSideBar}
+            className='active:scale-125 transform border-b-4 border-blue-600 animate-scale-in bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
+            <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
+          </button>
+        </footer>
+    </>
+  );
 }
+
+
+//slide bar
+export function SideBar({ open, setOpen, userData }: any) {
+  // user created data in simple format
+  let joinedDate = new Date((userData as any)?.user.createdAt)
+  const formattedDate = joinedDate.toDateString();
+
+  return (
+    <Transition.Root show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-in-out duration-500"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in-out duration-500"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </Transition.Child>
+
+        <div className="fixed inset-0  overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+              <Transition.Child
+                as={Fragment}
+                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enterFrom="translate-x-full"
+                enterTo="translate-x-0"
+                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leaveFrom="translate-x-0"
+                leaveTo="translate-x-full"
+              >
+                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-in-out duration-500"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in-out duration-500"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <div className="absolute left-14 top-0 -ml-0 flex pr-0 pt-4 sm:-ml-10 sm:pr-4">
+                      <button
+                        type="button"
+                        className="relative rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="absolute -inset-2.5" />
+                        {/* <span className="sr-only">Close panel</span> */}
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </Transition.Child>
+                  <div className="flex items-center  h-full w-3/4 absolute right-0 flex-col overflow-y-scroll bg-white dark:bg-darkColor py-4 shadow-xl ">
+                    <div className="px-4 sm:px-6 overflow-hidden">
+                      <Dialog.Title className="border-b-2 border-orange-400 my-2 text-base font-semibold leading-6 dark:text-gray-200 text-gray-900 ">
+                        Profile
+                      </Dialog.Title>
+                    </div>
+                    <div className='flex flex-col items-center bg-gray-200 dark:bg-gray-700 rounded-lg w-4/5 justify-center h-auto py-2'>
+                      <div className='bg-orange-600 rounded-full mt-4 w-fit h-fit'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" className="bi bi-person-fill text-white dark:text-indigo-300" viewBox="0 0 16 16">
+                          <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                        </svg>
+                      </div>
+                      <div className='pt-2 font-bold text-lg tracking-wide'>{userData ? userData.user.fullName : "NO DATA"}</div>
+                      <span className='text-xs p-1 italic '>{userData ? userData.user.email : "nodata@user.com"}</span>
+                      <div className='text-xs tracking-wide p-2'>Joined on : {formattedDate}</div>
+                    </div>
+                    <div className=' flex flex-wrap items-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full p-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
+                      <span className='border-b border-gray-200 w-fit mx-auto'>By Sudeep Bogati</span>
+                      <Link href={'/about'} className=' text-blue-500 hover:underline w-fit'>About</Link>
+                      <span className='text-sm'>info@sudipbogati.com.np</span>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </Transition.Root>
+  )
+}
+

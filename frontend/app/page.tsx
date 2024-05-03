@@ -187,7 +187,7 @@ export default function Home() {
             <div
               onMouseEnter={() => setShowFilters(true)}
               onMouseLeave={() => setShowFilters(false)}
-              className={`group flex items-center bg-indigo-300 text-gray-600 dark:bg-indigo-500  dark:text-white cursor-pointer border border-gray-400  px-2 rounded-xl `}>
+              className={`group flex items-center bg-indigo-500 text-gray-600 dark:bg-indigo-500  dark:text-white cursor-pointer border border-gray-400  px-2 rounded-xl `}>
               <span className='text-xs text-white'>Select Category</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                 stroke="currentColor" className="h-6 w-6">
@@ -256,11 +256,11 @@ export default function Home() {
         {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
         {/* footer section */}
         <footer className='h-1/12 bg-white dark:bg-darkColor mt-32 flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
-          <Link href={'/dashboard'} className=' animate-scale-in bg-orange-200 active:bg-orange-700 duration-200 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
+          <Link href={'/dashboard'} className='border-b-4 border-blue-600  active:scale-125 transform animate-scale-in bg-orange-200 active:bg-orange-700 duration-300 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
           </Link>
           <button
-            className="animate-popup active:bg-orange-300 ease active:text-black transition-all duration-300 button my-auto"
+            className="border-b-4 border-blue-600 animate-popup active:bg-orange-300 ease active:text-black active:scale-125 transform transition-all duration-300 button my-auto"
             onClick={() => setIsPopupOpen(true)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
@@ -269,7 +269,7 @@ export default function Home() {
           <SideBar userData={userData} open={open} setOpen={setOpen} />
           <button
             onClick={toggleSideBar}
-            className='animate-scale-in bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
+            className=' border-b-4 border-blue-600 active:scale-125 transform animate-scale-in bg-orange-200 p-2 my-auto rounded-full active:bg-orange-700 dark:active:bg-orange-800 duration-200 transition-all  dark:bg-orange-400'>
             <Image src={'/user.png'} width={25} height={25} alt='user'></Image>
           </button>
         </footer>
