@@ -1,44 +1,59 @@
 'use strict';
 
 const { QueryInterface, DataTypes } = require('sequelize');
-
 module.exports = {
-    up: async (queryInterface: typeof QueryInterface) => {
-        await queryInterface.createTable('Users', {
-            userId: {
-                allowNull: false,
-                autoIncrement: true,
-                primaryKey: true,
-                type: DataTypes.INTEGER,
-            },
-            fullName: {
-                allowNull: false,
-                type: DataTypes.STRING(25),
-            },
-            email: {
-                allowNull: false,
-                unique: true,
-                type: DataTypes.STRING,
-            },
-            password: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            confirmPassword: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            createdAt: {
-                allowNull: false,
-                type: DataTypes.DATE,
-            },
-            updatedAt: {
-                allowNull: false,
-                type: DataTypes.DATE,
-            },
-        });
-    },
-    down: async (queryInterface: typeof QueryInterface) => {
-        await queryInterface.dropTable('Users');
-    },
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('users', {
+      userId: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      fullName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: [5, 50], // Assuming you want to enforce this validation through the migration
+        },
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true, // Assuming you want to enforce this validation through the migration
+        },
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      confirmPassword: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      otp: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      isVerified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+  },
+
+  down: (queryInterface , Sequelize) => {
+    return queryInterface.dropTable('users');
+  },
 };

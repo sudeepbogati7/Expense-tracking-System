@@ -7,6 +7,14 @@ export const addExpense = async (req: Request, res: Response) => {
     try {
         const { expenseTitle, amount, category } = req.body;
         const userId = (req as any).user.userId;
+        const existingExpense = await Expenses.findOne({ where: { userId } });
+        if (existingExpense) {
+            if (existingExpense.expenseTitle == expenseTitle) {
+                return res.status(400).json({
+                    "error":"Expense Already exists !"
+                })
+            }
+        }
         const expense = await Expenses.create({
             expenseTitle,
             amount,
@@ -24,7 +32,6 @@ export const addExpense = async (req: Request, res: Response) => {
         console.log(err);
     }
 }
-
 // <------------------ See all expenses of a user  ------------------------->
 export const getExpenses = async (req: Request, res: Response) => {
     try {
@@ -40,9 +47,7 @@ export const getExpenses = async (req: Request, res: Response) => {
         res.status(200).json({
             success: true,
             data: expenses
-
         });
-
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -79,7 +84,6 @@ export const editExpenses = async (req: Request, res: Response) => {
             error: "Error while updating the expense. :( "
         });
     }
-
 }
 
 
