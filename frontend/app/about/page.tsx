@@ -15,13 +15,13 @@ export default function AboutMe() {
                     <ThemeSwitcher />
                 </span>
                 <Link href={"/"}>
-                {" "}
-                <div className="tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
-                    <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-400">my </span>
-                    <span className="text-3xl text-orange-600"> X</span>
-                    <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span> 
-                </div>
-            </Link>
+                    {" "}
+                    <div className="tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
+                        <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-400">my </span>
+                        <span className="text-3xl text-orange-600"> X</span>
+                        <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span>
+                    </div>
+                </Link>
                 <button className='border border-gray-400 px-2 rounded-lg text-center hover:bg-orange-400 hover:text-white text-base active:bg-orange-800 active:text-white transition-all duration-300 ease'><a href="/"> Home </a> </button>
             </header>
 
@@ -34,7 +34,7 @@ export default function AboutMe() {
                     </div>
                     <div className='border-2 border-[#c97534] w-fit h-fit rounded-l-xl overflow-hidden'><Image src={'/about.jpg'} width={150} height={150} alt='about-me-image' style={{ objectFit: 'cover' }}></Image></div>
                 </div>
-                <p className='w-4/5 w-full text-sm px-2 py-4 tracking-wide md:w-4/5 xl:w-1/2'> Hello, This is Sudeep Bogati,a passionate Software Engineer from Nepal, passionate about using technology to solve problems and create innovative solutions. I'm skilled in applying my engineering knowledge to design, develop, and maintain software applications. With a strong foundation in <span className='font-medium '> TypeScript </span>, <span className='font-medium '> NEXT.js </span>, <span className='font-medium'> NODE.js </span> , I'm eager to contribute to projects that make a positive impact.</p>
+                <p className='w-4/5 w-full text-sm px-2 py-4 tracking-wide md:w-4/5 xl:w-1/2'> Hello, This is Sudeep Bogati,a passionate Software Engineer from Nepal, passionate about using technology to solve problems and create innovative solutions. I am skilled in applying my engineering knowledge to design, develop, and maintain software applications. With a strong foundation in <span className='font-medium '> TypeScript </span>, <span className='font-medium '> NEXT.js </span>, <span className='font-medium'> NODE.js </span> , I am eager to contribute to projects that make a positive impact.</p>
                 {/* social links */}
                 <div className="social-buttons dark:bg-gray-500">
                     <Link href="https://github.com/sudeepbogati7" className="social-button github">
@@ -191,8 +191,20 @@ export default function AboutMe() {
                 <p>This expense tracker empowers you to take control of your finances. With its user-friendly interface, powerful visualization tools, and secure authentication, you can make informed spending decisions and achieve your financial goals.</p>
             </div>
             <footer className=' border-t border-gray-400 bg-gradient-to-t from-orange-200 via-gray-200 to-gray-200 px-2 py-4 mt-8 flex flex-col items-center dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 '>
-                <span className='text-gray-900 dark:text-gray-300 font-semibold'>Suggestions for improvement on </span>
-                <span className='text-sm dark:text-gray-300 tracking-widest'>sudeepbogati080@gmail.com</span>
+                <div className='text-gray-900 dark:text-gray-300 font-semibold'>
+                    <h1>Suggestions : </h1>
+                    <div className='flex gap-2 items-center '>
+                        <textarea
+                            className='bg-gray-200 outline-none border-2 border-gray-500 rounded-lg px-2 w-4/5'
+                            // value=""
+                            // onChange={handleChange}
+                            rows={4}
+                            cols={40}
+                            placeholder="Your suggestions for improvement here..."
+                        />
+                        <button className='w-1/5 bg-blue-600 text-white h-fit w-fit p-2 rounded active:bg-green-500 transition-all duration-300 ease text-sm'>Submit</button>
+                    </div>
+                </div>
                 <span className='text-base font-medium pt-2 mb-2  border-b border-gray-600 text-gray-800 dark:text-gray-300'> Find me on </span>
                 <ul className='flex gap-14 w-full items-center justify-center  list-disc'>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://stackoverflow.com/users/24161634/sudeepbogati'}> StackOverflow </Link></li>

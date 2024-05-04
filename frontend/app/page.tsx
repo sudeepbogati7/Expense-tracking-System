@@ -16,6 +16,9 @@ import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
 import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
+// retrive the token 
+import Cookies from 'js-cookie';
+const token = Cookies.get('token');
 
 interface Expense {
   expenseId: number;
@@ -25,8 +28,6 @@ interface Expense {
   createdAt: string;
   // Add other properties if needed
 }
-const token = localStorage.getItem('token');
-
 export default function Home() {
   const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
@@ -43,10 +44,10 @@ export default function Home() {
     const fetchData = async () => {
 
       try {
-        // if (!token) {
-        //   router.push('/register');
-        //   return;
-        // }
+        if (!token) {
+          router.push('/register');
+          return;
+        }
 
         // fetching user profile data
         const userResponse = await fetch('http://localhost:3001/api/user/profile', {
@@ -84,7 +85,7 @@ export default function Home() {
       }
     }
     fetchData();
-  }, [token, router]);
+  }, [router]);
 
   // date
   const getCurrentDate = () => {
@@ -166,7 +167,7 @@ export default function Home() {
 
         {/* Total Expense Viewer */}
         <div className='flex flex-col border-b-4 border-gray-200 dark:border-gray-600  h-38 w-full mx-auto '>
-          <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>" </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'>" </span></div>
+          <div className='text-xs w-4/5  text-center mx-auto pb-4 italic tracking-widest'> <span className='text-xl text-orange-500'>&quot; </span>Track Your Money: Take Charge of Your Finances <span className='text-xl text-orange-500'> &quot; </span></div>
           <div className='flex justify-center align-center animate-popup'>
             <span className='text-2xl text-orange-600  mb-14 my-auto'>Rs. </span>
             <div className={`p-4 ${filteredExpenses && filteredExpenses.length > 0 ? 'animate-slide-in' : ''} ${filteredExpenses && filteredExpenses.length > 0 ? (filteredExpenses.reduce((total: any, expense: any) => total + expense.amount, 0).toString().length > 6 ? 'text-3xl' : 'text-7xl') : 'text-7xl'} font-bold`}>
@@ -253,8 +254,7 @@ export default function Home() {
 
 
         <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} setIsOpen={setIsPopupOpen} />
-        {/* <AddPopUp isOpen={isPopupOpen} onClose={togglePopup} /> */}
-        {/* footer section */}
+
         <footer className='h-1/12 bg-white dark:bg-darkColor flex border border-gray-300 dark:border-gray-600 p-4 justify-around fixed left-0 bottom-0 w-full'>
           <Link href={'/dashboard'} className='border-b-4 border-blue-600  active:scale-125 transform animate-scale-in bg-orange-200 active:bg-orange-700 duration-300 transition-all p-2 my-auto rounded-full dark:bg-orange-400'>
             <Image src={'/bar-chart.png'} width={25} height={25} alt='analytics'></Image>
@@ -263,7 +263,7 @@ export default function Home() {
             className="border-b-4 border-blue-600 animate-popup active:bg-orange-300 ease active:text-black active:scale-125 transform transition-all duration-300 button my-auto"
             onClick={() => setIsPopupOpen(true)}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g stroke-width="1.5" stroke-linecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" height="20" fill="none" className="svg-icon"><g strokeWidth="1.5" strokeLinecap="round" stroke="#de8a2a"><circle r="7.5" cy="10" cx="10"></circle><path d="m9.99998 7.5v5"></path><path d="m7.5 9.99998h5"></path></g></svg>
             <span className="lable">Add</span>
           </button>
           <SideBar userData={userData} open={open} setOpen={setOpen} />
@@ -356,16 +356,13 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
         });
         onClose()
       } else {
-        setError(data); // Set error state if request fails
+        setError(data); 
       }
     } catch (error) {
       console.error("Error while adding expense:", error);
-      setError(error as any); // Set error state if fetch fails
+      setError(error as any); 
     }
   };
-
-  console.log("Error while adding expense:", error);
-  console.log("Successfully added:", responseData);
   if (!isOpen) return null;
 
   console.log("Form data on add expense : ", formData);
@@ -434,7 +431,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
 
 //====================================================================Edit popup====================================================================
 
-export function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
+function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
   const router = useRouter();
 
   const [customCategory, setCustomCategory] = useState('');
@@ -589,7 +586,7 @@ export function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
 }
 
 //slide bar
-export function SideBar({ open, setOpen, userData }: any) {
+function SideBar({ open, setOpen, userData }: any) {
   // user created data in simple format
   let joinedDate = new Date((userData as any)?.user.createdAt)
   const formattedDate = joinedDate.toDateString();
@@ -649,7 +646,7 @@ export function SideBar({ open, setOpen, userData }: any) {
                         Profile
                       </Dialog.Title>
                     </div>
-                    <div className='flex flex-col items-center bg-blue-200 dark:bg-gray-700 rounded-lg w-4/5 justify-center h-auto py-2'>
+                    <div className='animate-scale-in duration-500 flex flex-col items-center bg-blue-200 dark:bg-gray-700 rounded-lg w-4/5 justify-center h-auto py-2'>
                       <div className='bg-orange-600 rounded-full mt-4 w-fit h-fit'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" className="bi bi-person-fill text-white dark:text-indigo-300" viewBox="0 0 16 16">
                           <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
@@ -661,7 +658,7 @@ export function SideBar({ open, setOpen, userData }: any) {
                     </div>
 
 
-                    <div>
+                    {/* <div>
                       <h1 className='text-center px-2 font-medium border-gray-200 border-b-2 m-4 w-fit mx-auto'> My Expense Logs </h1>
                       <div className='mx-2 p-2 h-96 overflow-y-scroll bg-gray-200'>
                         <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
@@ -672,7 +669,7 @@ export function SideBar({ open, setOpen, userData }: any) {
                         <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
                         <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
                        </div>
-                    </div>
+                    </div> */}
 
 
 

@@ -33,7 +33,7 @@ const ResponseDataContext = createContext(initialContextValue);
 export const useResponseData = () => useContext(ResponseDataContext);
 
 // Context provider component
-export const ResponseDataProvider: React.FC = ({ children }: any) => {
+export const ResponseDataProvider: any = ({ children }: any) => {
     const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
     return (

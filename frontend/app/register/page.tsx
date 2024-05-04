@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
 
+import Cookies from 'js-cookie';
 
 export default function Register() {
     const { responseData, setResponseData } = useResponseData();
@@ -42,7 +43,8 @@ export default function Register() {
             if (response.ok && data.success == true) {
                 setResponseData(data);
                 setError(null);
-                localStorage.setItem('token', data.token);
+
+                Cookies.get('token');
                 router.push(`/register/verify/?email=${data.user.email}`);
             } else {
                 setError(data);
@@ -65,14 +67,14 @@ export default function Register() {
                     <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span> 
                 </div>
             </Link>
-                <Link href={'/about'} className='border px-3 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
-                    About
+                <Link href={'/about'} className='border px-3 rounded-lg flex items-center text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
+                    <span>About</span>
                 </Link>
             </header>
             <main>
                 {responseData && <SuccessNotification successResponse={responseData}  />}
                 {error && <ErrorNotification error={error}  />}
-                <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 w-full'>
+                <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 md:w-2/3  mx-auto xl:w-1/3 xl:border-2 xl:border-gray-300  xl:mt-14 rounded-xl  w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>
                     <form
                         onSubmit={handleSubmit}

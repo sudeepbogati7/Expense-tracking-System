@@ -12,6 +12,8 @@ import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
+import Cookies from 'js-cookie';
+
 export default function Login() {
     const router = useRouter();
     const { responseData, setResponseData } = useResponseData();
@@ -36,9 +38,11 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
             const data = await response.json();
-            if (response.ok && data.success) {
-                router.push('/')
-                localStorage.setItem('token', data.token);
+            if (response.ok) {
+                router.push('/');
+                // Store token in a cookie with HttpOnly and Secure flags
+                Cookies.set('token', data.token, { secure: true, sameSite: 'strict' });
+                // Update state
                 setResponseData(data);
                 setError(null);
             } else {
@@ -51,25 +55,25 @@ export default function Login() {
     console.log('Error while login ===> ', error);
     return (
         <>
-            {responseData && <SuccessNotification successResponse={responseData}  />}
-            {error && <ErrorNotification error={error}  />}
+            {responseData && <SuccessNotification successResponse={responseData} />}
+            {error && <ErrorNotification error={error} />}
             <div className='h-screen w-full'>
                 <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                     <span className='my-auto'><ThemeSwitcher /></span>
-                     <Link href={"/"}>
-                {" "}
-                <div className="tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
-                    <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-400">my </span>
-                    <span className="text-3xl text-orange-600"> X</span>
-                    <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span> 
-                </div>
-            </Link>
+                    <Link href={"/"}>
+                        {" "}
+                        <div className="tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
+                            <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-400">my </span>
+                            <span className="text-3xl text-orange-600"> X</span>
+                            <span className="tracking-widest text-base font-normal border-t-2 border-orange-400"> penses</span>
+                        </div>
+                    </Link>
                     <Link href={'/about'} className='text-center my-auto border px-2 py-0 rounded-lg text-center border-orange-700 hover:bg-orange-700 hover:text-white transition-all duration-200 '>
                         About
                     </Link>
                 </header>
                 <main>
-                    <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
+                    <div className='flex flex-col flex-wrap align-center justify-center container mx-auto md:w-2/3 xl:w-1/3 xl:mt-14 xl:border-2 xl:rounded-xl border-gray-300 sm:w-2/3 p-4 w-full'>
                         <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Login </span> Your Identity</span>
                         <form
                             onSubmit={handleSubmit}
@@ -98,8 +102,8 @@ export default function Login() {
                             <div className='px-4'>
                                 <button className='border my-6 rounded-xl p-2 text-md font-medium tracking-wide w-full dark:shadow-lg dark:shadow-orange-600/40 mx-auto hover:bg-orange-700 hover:text-white transition-all duration-300 ease-in-out border-orange-600' > Login </button>
                             </div>
-                            <Link href='/login/forget-password' className='mx-auto text-base '> Forgot password ? </Link>
-                            <div className='mx-auto my-4 text-base'>Don't have an account ? <Link href={'/register'}> <span className='text-orange-600 border-b border-orange-400'> Register </span> </Link></div>
+                            <Link href='/login/forget-password' className='mx-auto text-base text-blue-600 underline '> Forgot password ? </Link>
+                            <div className='mx-auto my-4 text-base'>Don&apos;t have an account ? <Link href={'/register'}> <span className='text-orange-600 border-b border-orange-400'> Register </span> </Link></div>
                         </form>
                     </div>
                 </main>

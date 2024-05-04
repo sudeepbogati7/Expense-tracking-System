@@ -22,8 +22,6 @@ export default function Login() {
         otp: ''
     });
     const router = useRouter();
-    if (localStorage.getItem('token')) router.push('/')
-
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -64,7 +62,7 @@ export default function Login() {
             </header>
             <main>
                 {error && <ErrorNotification error={ error} />}
-                <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
+                <div className='flex flex-col flex-wrap align-center justify-center container  p-4 md:w-2/3 xl:w-1/3 mx-auto w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Forget </span> password</span>
                     <form
                         onSubmit={handleSubmit}

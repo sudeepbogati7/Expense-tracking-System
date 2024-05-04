@@ -2,11 +2,16 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useRouter } from "next/navigation";
+
+import Cookies from 'js-cookie';
+
+
 export default function Header() {
     const router = useRouter();
 
     const logout = () => {
-        localStorage.removeItem("token");
+        // Remove the token cookie
+        Cookies.remove('token');
         router.push("/register");
     };
     const handleLogoutClick = () => {
@@ -23,7 +28,7 @@ export default function Header() {
                 <div className="animate-scale-in tracking-widest font-medium flex text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto">
                     <span className="text-sm tracking-widest font-normal  border-t-2 border-orange-600 ">my </span>
                     <span className="text-3xl text-orange-600 "> X</span>
-                    <span className="tracking-widest text-base font-normal border-t-2 border-gray-300 hover:border-orange-500 transition-all duration--900 ease-linear"> penses</span> 
+                    <span className="tracking-widest text-base font-normal border-t-2 border-gray-300 hover:border-orange-500 transition-all duration--900 ease-linear"> penses</span>
                 </div>
             </Link>
             <div onClick={handleLogoutClick} className=" transition-all duration-300 Btn my-auto">
@@ -60,7 +65,7 @@ export function LogoutPopup({ onClose, logout }: any) {
         }
 
     }
-    
+
     return (
         <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
             {/* Overlay */}
