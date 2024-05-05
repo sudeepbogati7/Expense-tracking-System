@@ -7,28 +7,28 @@ require('dotenv').config();
 
 
 // for dev
-// const sequelize = new Sequelize({
-//     dialect: 'postgres',
-//     host: 'localhost',
-//     port: 5432,
-//     username: 'postgres',
-//     password: 'sudeep',
-//     database: 'expense-tracker',
-//     models: [User, Expenses],
-//     logging: console.log,
-//     dialectModule: pg,
-// });
 const sequelize = new Sequelize({
     dialect: 'postgres',
-    host: 'dpg-cor2lri0si5c739avro0-a',
+    host: 'localhost',
     port: 5432,
-    username: 'sudeep',
-    password: 'qUgdlhJJOIOSR8wAAopF3ysYOTULjWhe',
-    database: 'expense_tracking_system',
+    username: 'postgres',
+    password: 'sudeep',
+    database: 'expense-tracker',
     models: [User, Expenses],
+    logging: console.log,
     dialectModule: pg,
-    ssl:true
 });
+// const sequelize = new Sequelize({
+//     dialect: 'postgres',
+//     host: 'dpg-cor2lri0si5c739avro0-a',
+//     port: 5432,
+//     username: 'sudeep',
+//     password: 'qUgdlhJJOIOSR8wAAopF3ysYOTULjWhe',
+//     database: 'expense_tracking_system',
+//     models: [User, Expenses],
+//     dialectModule: pg,
+//     ssl:true
+// });
 
 // const sequelize = new Sequelize({
 //     dialect: process.env.DB_DIALECT,
