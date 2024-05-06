@@ -92,17 +92,16 @@ const registerUserAfterOTPVerification = async (req: Request, res: Response) => 
                 user.isVerified = true;
                 user.otp = '';
                 user.save();
-                res.status(200).json({
+                return res.status(200).json({
                     success :true,
                     message: "Verification Successful",
                     user: user
                 });
             } catch (error) {
-                res.status(500).json({
+                return res.status(500).json({
                     success : false, 
                     error: "Opps , something went wrong. Please try again later"
                 });
-                console.log("Error while saving into database :", error);
             }
         } else {
             return res.status(401).json({
