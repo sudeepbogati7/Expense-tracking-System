@@ -20,14 +20,15 @@ const sequelize = new Sequelize({
 });
 // const sequelize = new Sequelize({
 //     dialect: 'postgres',
-//     host: 'dpg-cor2lri0si5c739avro0-a',
+//     host: 'dpg-corglqnsc6pc73dnv3tg-a.oregon-postgres.render.com',
 //     port: 5432,
 //     username: 'sudeep',
-//     password: 'qUgdlhJJOIOSR8wAAopF3ysYOTULjWhe',
-//     database: 'expense_tracking_system',
+//     password: 'JJTbJ59oQ2eoYFZdat9dkTLshB58rrPH',
+//     database: 'expense_tracker_jj2p',
 //     models: [User, Expenses],
 //     dialectModule: pg,
-//     ssl:true
+//     ssl: true,
+    
 // });
 
 // const sequelize = new Sequelize({
