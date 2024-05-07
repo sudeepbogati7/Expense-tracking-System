@@ -40,11 +40,10 @@ export default function Register() {
                 body: JSON.stringify(formData)
             });
             const data = await response.json();
-            if (response.ok && data.success == true) {
+            if (response.ok ) {
                 setResponseData(data);
                 setError(null);
-
-                Cookies.get('token');
+                Cookies.set('token', data.token);
                 router.push(`/register/verify/?email=${data.user.email}`);
             } else {
                 setError(data);

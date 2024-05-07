@@ -40,8 +40,7 @@ export default function Login() {
             const data = await response.json();
             if (response.ok) {
                 router.push('/');
-                // Store token in a cookie with HttpOnly and Secure flags
-                Cookies.set('token', data.token, { secure: true, sameSite: 'strict' });
+                Cookies.set('token', data.token);
                 // Update state
                 setResponseData(data);
                 setError(null);

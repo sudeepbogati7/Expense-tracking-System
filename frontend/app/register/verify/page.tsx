@@ -46,7 +46,7 @@ export default function Verify() {
             });
             const data = await response.json();
             if (response.ok) {
-                router.push('/')
+                router.push('/');
                 setResponseData(data);
                 setError(null);
             } else {
