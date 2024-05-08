@@ -11,10 +11,12 @@ import { useResponseData } from '@/components/ResponseDataContext';
 import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
 
 import Cookies from 'js-cookie';
+import Loading from '../loading';
 
 export default function Register() {
     const { responseData, setResponseData } = useResponseData();
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -32,7 +34,8 @@ export default function Register() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/register', {
+            setLoading(true);
+            const response = await fetch('https://expense-tracking-system.onrender.com/api/user/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,6 +43,7 @@ export default function Register() {
                 body: JSON.stringify(formData)
             });
             const data = await response.json();
+            setLoading(false);
             if (response.ok ) {
                 setResponseData(data);
                 setError(null);
@@ -71,7 +75,8 @@ export default function Register() {
                 </Link>
             </header>
             <main>
-                {responseData && <SuccessNotification successResponse={responseData}  />}
+                {responseData && <SuccessNotification successResponse={responseData} />}
+                {loading && <Loading />}
                 {error && <ErrorNotification error={error}  />}
                 <div className='flex z-0 pb-24 flex-col flex-wrap align-center justify-center container  p-4 md:w-2/3  mx-auto xl:w-1/3 xl:border-2 xl:border-gray-300  xl:mt-14 rounded-xl  w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Get Started </span> with your Identity</span>

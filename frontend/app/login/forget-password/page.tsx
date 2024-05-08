@@ -11,11 +11,14 @@ import Header from '@/components/Header';
 import { useRouter } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
+import Loading from '@/app/loading';
 
 export default function Login() {
 
     const {responseData, setResponseData} = useResponseData();
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         email: ''
     });
@@ -28,7 +31,8 @@ export default function Login() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/forget-password', {
+            setLoading(true);
+            const response = await fetch('https://expense-tracking-system.onrender.com/api/user/forget-password', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -36,6 +40,7 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
             const data = await response.json();
+            setLoading(false);
             if (response.ok) {
                 router.push(`/login/forget-password/reset?email=${formData.email}`)
                 setResponseData(data);
@@ -51,6 +56,7 @@ export default function Login() {
     return (
         <div className='h-screen w-full'>
             {error && <ErrorNotification error={error} />}
+            {loading && <Loading />}
             <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                 <span className='my-auto'><ThemeSwitcher /></span>
                 <Link href={'/'}> <p className='font-medium text-lg border-b-2 hover:border-orange-500 dark:hover:border-orange-500 transition-all duration-900  ease-linear dark:border-gray-500 border-gray-300 my-auto'>My <span className='text-orange-600'> Expenses </span></p></Link>

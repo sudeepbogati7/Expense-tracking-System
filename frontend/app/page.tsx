@@ -18,6 +18,7 @@ import { ErrorNotification, SuccessNotification } from '@/components/Notificatio
 
 // retrive the token 
 import Cookies from 'js-cookie';
+import Loading from './loading';
 const token = Cookies.get('token');
 
 interface Expense {
@@ -50,7 +51,7 @@ export default function Home() {
         }
 
         // fetching user profile data
-        const userResponse = await fetch('http://localhost:3001/api/user/profile', {
+        const userResponse = await fetch('https://expense-tracking-system.onrender.com/api/user/profile', {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ export default function Home() {
         }
 
         // fetching user expenses data 
-        const expenseResponse = await fetch('http://localhost:3001/api/expenses/my-expenses', {
+        const expenseResponse = await fetch('https://expense-tracking-system.onrender.com/api/expenses/my-expenses', {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -283,7 +284,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
   const router = useRouter();
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     expenseTitle: '',
     amount: '',
@@ -338,7 +339,8 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
 
   const handleExpenseSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/expenses/add', {
+      setLoading(true);
+      const response = await fetch('https://expense-tracking-system.onrender.com/api/expenses/add', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -346,6 +348,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
         },
         body: JSON.stringify(formData)
       });
+      setLoading(false);
       const data = await response.json();
       if (response.ok) {
         setResponseData(data);
@@ -370,6 +373,7 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
     <>
       {responseData && <SuccessNotification successResponse={responseData} />}
       {error && <ErrorNotification error={error} />}
+      {loading && <Loading />}
       <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-60"></div>
@@ -449,7 +453,7 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
   const [editCategory, setEditCategory] = useState(false);
   const { responseData, setResponseData } = useResponseData();
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     expenseTitle: expenseData.expenseTitle,
@@ -469,7 +473,7 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
 
   const handleExpenseSubmit = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/expenses/edit/${expenseData.expenseId}`, {
+      const response = await fetch(`https://expense-tracking-system.onrender.com/api/expenses/edit/${expenseData.expenseId}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -491,7 +495,8 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
 
   const handleExpenseDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/expenses/delete/${expenseData.expenseId}`, {
+      setLoading(true);
+      const response = await fetch(`https://expense-tracking-system.onrender.com/api/expenses/delete/${expenseData.expenseId}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
@@ -499,6 +504,7 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
         },
       });
       const data = await response.json();
+      setLoading(false);
       if (response.ok) {
         setResponseData(data);
         onclose();
@@ -516,6 +522,7 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
   if (!editPopupOpen) return null;
   return (
     <>
+      {loading && <Loading />}
       <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
         {/* Overlay */}
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-15"></div>

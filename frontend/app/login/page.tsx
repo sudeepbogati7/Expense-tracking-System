@@ -13,11 +13,13 @@ import { useResponseData } from '@/components/ResponseDataContext';
 import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
 
 import Cookies from 'js-cookie';
+import Loading from '../loading';
 
 export default function Login() {
     const router = useRouter();
     const { responseData, setResponseData } = useResponseData();
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -30,13 +32,15 @@ export default function Login() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/login', {
+            setLoading(true);
+            const response = await fetch('https://expense-tracking-system.onrender.com/api/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
+            setLoading(false);
             const data = await response.json();
             if (response.ok) {
                 router.push('/');
@@ -56,6 +60,7 @@ export default function Login() {
         <>
             {responseData && <SuccessNotification successResponse={responseData} />}
             {error && <ErrorNotification error={error} />}
+            {loading && <Loading />}
             <div className='h-screen w-full'>
                 <header className='h-16  flex align-center shadow-gray-500/10 shadow-md justify-between  w-full p-4 dark:shadow-gray-500/30 '>
                     <span className='my-auto'><ThemeSwitcher /></span>

@@ -11,10 +11,12 @@ import Header from '@/components/Header';
 import { useRouter,useSearchParams } from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { SuccessNotification, ErrorNotification } from '@/components/Notifications';
+import Loading from '@/app/loading';
 export default function Login() {
     const params = useSearchParams();
     const {responseData, setResponseData} = useResponseData();
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         email : params.get('email'),
         password: '',
@@ -30,7 +32,8 @@ export default function Login() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/forget-password/reset', {
+            setLoading(true);
+            const response = await fetch('https://expense-tracking-system.onrender.com/api/user/forget-password/reset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,6 +41,7 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
             const data = await response.json();
+            setLoading(false);
             if (response.ok) {
                 setResponseData(data);
                 router.push('/login')
@@ -61,7 +65,8 @@ export default function Login() {
                 </Link>
             </header>
             <main>
-                {error && <ErrorNotification error={ error} />}
+                {error && <ErrorNotification error={error} />}
+                {loading && <Loading />}
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 md:w-2/3 xl:w-1/3 mx-auto w-full'>
                     <span className='text-center text-xl font-medium p-2'> <span className='text-orange-600 border-b border-orange-300'> Forget </span> password</span>
                     <form

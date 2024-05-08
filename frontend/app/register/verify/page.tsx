@@ -12,6 +12,7 @@ import Header from '@/components/Header';
 import { useRouter , useSearchParams} from 'next/navigation';
 import { useResponseData } from '@/components/ResponseDataContext';
 import { ErrorNotification, SuccessNotification } from '@/components/Notifications';
+import Loading from '@/app/loading';
 
 
 
@@ -19,8 +20,7 @@ export default function Verify() {
     const params = useSearchParams();
     const email = params.get('email');
     const { responseData, setResponseData } = useResponseData();
-    console.log("Response data from verify :;;;;;;;;;;;;;;;;;;;;;;;;;;;", responseData)
-
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         otp: '',
@@ -37,13 +37,15 @@ export default function Verify() {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/api/user/register/verify-otp', {
+            setLoading(true);
+            const response = await fetch('https://expense-tracking-system.onrender.com/api/user/register/verify-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
+            setLoading(false);
             const data = await response.json();
             if (response.ok) {
                 router.push('/');
@@ -68,6 +70,7 @@ export default function Verify() {
                 </Link>
             </header>
             <main>
+                {loading && <Loading />}
                 {error && <ErrorNotification error={error} />}
                 {responseData && <SuccessNotification successResponse={responseData} />}
                 <div className='flex flex-col flex-wrap align-center justify-center container  p-4 w-full'>
