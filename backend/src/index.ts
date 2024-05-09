@@ -36,7 +36,7 @@ require('./utils/envVariables')();
 
 // database synchronization
 // {force:true} deletes all the data from the db and migrates the model changes (only for dev env)
-sequelize.sync()
+sequelize.authenticate()
     .then(() => {
         console.log("Synchronized successfull..............")
         app.listen(PORT, () => {
