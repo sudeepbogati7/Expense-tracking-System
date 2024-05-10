@@ -3,8 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* switch settings 👇 */
-
 .ui-switch {
   /* switch */
   --switch-bg: rgb(135, 150, 165);
