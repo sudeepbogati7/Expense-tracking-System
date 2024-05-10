@@ -5,7 +5,7 @@ import { validateToken } from "../utils/validateToken";
 const router = Express.Router();
 
 
-router.post('/login', loginUser); //login user
+router.post('/login', loginUser); 
 router.post('/register',validateUserRegistration, sendOTPAndCacheUserData);
 router.post('/register/verify-otp', registerUserAfterOTPVerification);
 router.post('/logout', logoutUser)
