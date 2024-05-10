@@ -6,7 +6,6 @@ const PORT = process.env.PORT || 3001;
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-
 // middlewares
 app.use(bodyParser.json());
 app.use(Express.json());
@@ -15,7 +14,6 @@ app.use(cors({
 }));
 
 
-// parse cookies on server side
 app.use(cookieParser());
 
 
@@ -28,14 +26,11 @@ app.use('/api/user', router);
 
 import expenseRoutes from './routes/expenseRoutes'
 app.use('/api/expenses', expenseRoutes);
-// env variables check 
+
 require('./utils/envVariables')();
 
 
 
-
-// database synchronization
-// {force:true} deletes all the data from the db and migrates the model changes (only for dev env)
 sequelize.authenticate()
     .then(() => {
         console.log("Synchronized successfull..............")
