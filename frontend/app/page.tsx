@@ -1,5 +1,4 @@
 'use client';
-
 import './page.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
@@ -181,8 +180,6 @@ export default function Home() {
           </div>
           <span className='py-4 text-center align-center tracking-widest text-gray-500'>{getCurrentDate()}</span>
         </div>
-
-        {/* List of the expenses */}
         <div className='shadow-gray-500/10 shadow-xl flex items-center justify-around text-base shadow-md text-gray-500 dark:text-gray-400 flex justify-center gap-6  px-6 py-4  '>
           <div className='flex gap-4 '>
             <label htmlFor="category">Filter category : </label>
@@ -290,11 +287,6 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
     amount: '',
     category: ''
   });
-  // const handleChange = (e: any) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
   const [customCategory, setCustomCategory] = useState('');
   const [categories, setCategories] = useState([
     { value: 'education', label: '📚 Education' },
