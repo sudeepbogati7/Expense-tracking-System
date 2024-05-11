@@ -24,3 +24,15 @@ It offers features for daily and monthly expense tracking, insightful visualizat
 <ul>
   <li> PostgreSQL </li>
 </ul>
+
+
+**Featues**
+<ul>
+  <li>Authentication Authorization , (User can login , logout, Token based authentication) </li>
+  <li>Add , Edit, Delete Expenses </li>
+  <li>Add expenses with the appropriate category </li>
+  <li>Filter your expenses based on the categories </li>
+  <li> Analytics , Dashboard to view daily expenses graphically  </li>
+  <li> Piechart to show the category based expenses , Barchart for analyzing daily expenses </li>
+  <li>Filter your expenses based on the categories </li>
+</ul>
