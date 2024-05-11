@@ -35,7 +35,6 @@ It offers features for daily and monthly expense tracking, insightful visualizat
   <li>Filter your expenses based on the categories </li>
   <li> Analytics , Dashboard to view daily expenses graphically  </li>
   <li> Piechart to show the category based expenses , Barchart for analyzing daily expenses </li>
-  <li>Filter your expenses based on the categories </li>
 </ul>
 
 # Preview : 
