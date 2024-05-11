@@ -29,6 +29,7 @@ It offers features for daily and monthly expense tracking, insightful visualizat
 # Featues
 <ul>
   <li>Authentication Authorization , (User can login , logout, Token based authentication) </li>
+  <li> Forget Password using OTP verification mail. </li>
   <li>Add , Edit, Delete Expenses </li>
   <li>Add expenses with the appropriate category </li>
   <li>Filter your expenses based on the categories </li>
@@ -36,3 +37,22 @@ It offers features for daily and monthly expense tracking, insightful visualizat
   <li> Piechart to show the category based expenses , Barchart for analyzing daily expenses </li>
   <li>Filter your expenses based on the categories </li>
 </ul>
+
+
+
+# Preview : 
+
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/302b2431-c10c-4b9b-8fe2-d55696a78aea" width="200" height="">
+
+
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/0ed2e062-0e1f-49b1-a809-d2597a7d278d" width="200" height="">
+
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/de8762db-0997-4487-ad81-ef915fbb6089" width="200" height="">
+
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/2457b5f6-1fb7-488b-a345-57aa8a66e090" width="200" height="">
+
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/e058cd67-1738-4128-b3ad-82cba0044ada" width="200" height="">
+
+
+
+
