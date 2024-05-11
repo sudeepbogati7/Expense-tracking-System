@@ -38,13 +38,11 @@ It offers features for daily and monthly expense tracking, insightful visualizat
   <li>Filter your expenses based on the categories </li>
 </ul>
 
-
-
 # Preview : 
 
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/162bc44c-7e02-4594-9738-c86f1ccbf819" width="200" height="">
 
 <img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/9742fbae-a918-46f2-b635-00f3cc841cba" width="200" height="">
-
 
 <img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/302b2431-c10c-4b9b-8fe2-d55696a78aea" width="200" height="">
 
