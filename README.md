@@ -26,7 +26,7 @@ It offers features for daily and monthly expense tracking, insightful visualizat
 </ul>
 
 
-**Featues**
+# Featues
 <ul>
   <li>Authentication Authorization , (User can login , logout, Token based authentication) </li>
   <li>Add , Edit, Delete Expenses </li>
