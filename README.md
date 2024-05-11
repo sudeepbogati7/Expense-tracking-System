@@ -58,3 +58,7 @@ It offers features for daily and monthly expense tracking, insightful visualizat
 
 
 
+<img src="https://github.com/sudeepbogati7/Expense-tracking-System/assets/106460936/4d69cce8-dce3-47cf-8af4-c5311292a41c" width="200" height="">
+
+
+
