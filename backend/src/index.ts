@@ -31,7 +31,7 @@ require('./utils/envVariables')();
 
 
 
-sequelize.authenticate()
+sequelize.sync()
     .then(() => {
         console.log("Synchronized successfull..............")
         app.listen(PORT, () => {
