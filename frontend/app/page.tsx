@@ -19,6 +19,7 @@ import { ErrorNotification, SuccessNotification } from '@/components/Notificatio
 import Cookies from 'js-cookie';
 import Loading from './loading';
 const token = Cookies.get('token');
+console.log("TOken from page.tsx ; ", token)
 
 interface Expense {
   expenseId: number;
