@@ -25,6 +25,9 @@ It offers features for daily and monthly expense tracking, insightful visualizat
   <li> PostgreSQL </li>
 </ul>
 
+**Libraries :** 
+`nodemailer` , `jsonwebtoken(JWT)` `Joi` `Sequelize-typescript` `pg`  
+
 
 # Featues
 <ul>
