@@ -423,11 +423,6 @@ const AddPopUp = ({ onClose, isOpen, setIsOpen }: any) => {
     </>
   )
 }
-
-
-
-//====================================================================Edit popup====================================================================
-
 function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
   const router = useRouter();
 
@@ -517,7 +512,8 @@ function EditPopup({ expenseData, editPopupOpen, onclose }: any) {
     <>
       {loading && <Loading />}
       <div className="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden flex items-center justify-center">
-        {/* Overlay */}
+
+        
         <div aria-hidden="true" className="fixed inset-0 bg-black opacity-15"></div>
 
         <div className={`relative animate-popup rounded-xl bg-gray-100 gap-4 dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600 mb-24 h-fit py-4 w-4/5 md:w-2/3 xl:w-1/3 items-center flex flex-col mx-auto  `}>
@@ -656,23 +652,6 @@ function SideBar({ open, setOpen, userData }: any) {
                       <span className='text-xs p-1 italic '>{userData ? userData.user.email : "nodata@user.com"}</span>
                       <div className='text-xs tracking-wide p-2'>Joined on : {formattedDate}</div>
                     </div>
-
-
-                    {/* <div>
-                      <h1 className='text-center px-2 font-medium border-gray-200 border-b-2 m-4 w-fit mx-auto'> My Expense Logs </h1>
-                      <div className='mx-2 p-2 h-96 overflow-y-scroll bg-gray-200'>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Edited : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                        <div className='text-xs'>Added new expense : <span> {"Expense Title"} </span> on <span> may 2 , 2024 05:12 AM </span></div>
-                       </div>
-                    </div> */}
-
-
-
                     <div className=' flex flex-wrap items-center justify-center flex-col text-sm text-gray-700 gap-2 absolute bottom-0 w-full py-4 h-1/6 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-500 dark:text-gray-300 '>
                       <span className='border-b border-gray-200 w-fit mx-auto'>By Sudeep Bogati</span>
                       <Link href={'/about'} className=' text-blue-500 hover:underline w-fit'>About</Link>
