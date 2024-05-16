@@ -31,6 +31,7 @@ It offers features for daily and monthly expense tracking, insightful visualizat
 
 # Featues
 <ul>
+  <li> Choose between Dark and Light theme. </li>
   <li>Authentication Authorization , (User can login , logout, Token based authentication) </li>
   <li> Forget Password using OTP verification mail. </li>
   <li>Add , Edit, Delete Expenses </li>
