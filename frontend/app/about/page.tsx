@@ -1,5 +1,4 @@
 'use client';
-// import '../globals.css';
 import './about.css';
 import '../page.css';
 import React from 'react';
