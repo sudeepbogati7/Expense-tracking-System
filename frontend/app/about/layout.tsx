@@ -1,10 +1,9 @@
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from '../theme-provider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 const inter = Inter({ subsets: ["latin"] });
-import 'tailwindcss/tailwind.css';
+import '../globals.css';
 export const metadata: Metadata = {
     title: "About Me ",
     description: "Expense Tracker, by sudeepbogati7s",

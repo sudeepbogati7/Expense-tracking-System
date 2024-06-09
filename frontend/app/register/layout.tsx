@@ -4,7 +4,6 @@ import "../globals.css";
 import { ThemeProvider } from '../theme-provider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 const inter = Inter({ subsets: ["latin"] });
-import 'tailwindcss/tailwind.css';
 export const metadata: Metadata = {
     title: "Register || Expense Tracker",
     description: "Expense Tracker, by sudeepbogati7s",

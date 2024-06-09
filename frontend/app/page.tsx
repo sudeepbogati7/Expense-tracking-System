@@ -1,5 +1,6 @@
 'use client';
 import './page.css';
+import './globals.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
@@ -7,8 +8,7 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import Link from 'next/link';
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import 'tailwindcss/tailwind.css';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useResponseData } from '@/components/ResponseDataContext';
 // components
 import Header from '@/components/Header';

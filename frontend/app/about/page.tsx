@@ -1,12 +1,13 @@
 'use client';
+import '../globals.css';
 import './about.css';
 import '../page.css';
-import 'tailwindcss/tailwind.css';
 import React from 'react';
-import Header from '@/components/Header';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+
+
 export default function AboutMe() {
     return (
         <>

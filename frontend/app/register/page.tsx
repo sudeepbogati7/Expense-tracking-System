@@ -1,7 +1,7 @@
 'use client';
 import '../login/login.css';
 import '../page.css';
-import 'tailwindcss/tailwind.css';
+import '../'
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
