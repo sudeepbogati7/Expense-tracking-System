@@ -1,5 +1,5 @@
 'use client';
-import '../globals.css';
+// import '../globals.css';
 import './about.css';
 import '../page.css';
 import React from 'react';
@@ -193,8 +193,8 @@ export default function AboutMe() {
             </div>
             <footer className=' border-t border-gray-400 bg-gradient-to-t from-orange-200 via-gray-200 to-gray-200 px-2 py-4 mt-8 flex flex-col items-center dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 '>
                 <div className='text-gray-900 dark:text-gray-300 font-semibold'>
-                    <h1>Suggestions : </h1>
-                    <div className='flex gap-2 items-center '>
+                    <h1 className='px-8 py-2'>Suggestions : </h1>
+                    <div className='flex gap-2 md:flex-row flex-col items-center '>
                         <textarea
                             className='bg-gray-200 outline-none border-2 border-gray-500 rounded-lg px-2 w-4/5'
                             // value=""
@@ -207,7 +207,7 @@ export default function AboutMe() {
                     </div>
                 </div>
                 <span className='text-base font-medium pt-2 mb-2  border-b border-gray-600 text-gray-800 dark:text-gray-300'> Find me on </span>
-                <ul className='flex gap-14 w-full items-center justify-center  list-disc'>
+                <ul className='flex gap-6 mx-auto w-full items-center justify-center  list-disc'>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://stackoverflow.com/users/24161634/sudeepbogati'}> StackOverflow </Link></li>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://github.com/sudeepbogati7'}>Github </Link></li>
                     <li className='hover:underline text-gray-700 dark:text-gray-400'><Link href={'https://linkedin.com/in/sudeep-bogati'}> LinkedIn </Link></li>

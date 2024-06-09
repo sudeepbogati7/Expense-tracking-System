@@ -1,7 +1,7 @@
 'use client';
 import '../login/login.css';
 import '../page.css';
-import '../'
+import '../globals.css';
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
