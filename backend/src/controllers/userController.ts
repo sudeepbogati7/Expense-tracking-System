@@ -225,7 +225,6 @@ const forgetPasswordHandler = async (req: Request, res: Response) => {
             success : false, 
             error: "Please set your new password"
         });
-
         otp.trim();
         confirmPassword = confirmPassword.trim();
         password = password.trim();
