@@ -165,8 +165,6 @@ export const userProfile = async (req: Request, res: Response) => {
         user: user
     });
 }
-
-
 // <-------------------------- Logout  ---------------------------------->
 const logoutUser = async (req: Request, res: Response) => {
     try {
@@ -182,7 +180,6 @@ const logoutUser = async (req: Request, res: Response) => {
         })
     }
 }
-
 // <-------------------------- Forget Password ---------------------------------->
 import { passwordResetTokenMail } from '../utils/sendMail';
 import { any } from 'joi';
