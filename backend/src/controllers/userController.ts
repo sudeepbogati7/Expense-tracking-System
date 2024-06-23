@@ -237,9 +237,7 @@ const forgetPasswordHandler = async (req: Request, res: Response) => {
             success : false, 
             error: "NO USER FOUND !!"
         });
-
         const otpFromDB = user.otp;
-        
         if (!otpFromDB) return res.status(404).json({ "error": "Failed to fetch your OTP." });
         if (password !== confirmPassword) return res.status(400).json({
             success : false, 
