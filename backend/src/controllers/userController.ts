@@ -11,6 +11,7 @@ import { validateUserRegistration } from '../utils/validateUserInput';
 import NodeCache from 'node-cache';
 const otpCache = new NodeCache();
 const userCache = new NodeCache();
+require('dotenv').config();
 
 
 interface RegisterUserBody {
@@ -19,8 +20,6 @@ interface RegisterUserBody {
     password: string;
     confirmPassword: string;
 }
-
-require('dotenv').config();
 const jwt_secret: any = process.env.JWT_SECRET;
 // <-------------------------- Sending OTP , storing userInfo in NodeCache  ---------------------------------->
 const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
