@@ -55,7 +55,6 @@ export const getExpenses = async (req: Request, res: Response) => {
         });
     }
 }
-
 export const editExpenses = async (req: Request, res: Response) => {
     try {
         const userId = (req as any).user.userId;
@@ -85,8 +84,6 @@ export const editExpenses = async (req: Request, res: Response) => {
         });
     }
 }
-
-
 
 export const deleteExpense = async (req: Request, res: Response) => {
     try {
