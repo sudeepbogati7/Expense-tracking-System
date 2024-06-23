@@ -7,13 +7,6 @@
     "password":"sudeep",
     "database": "expense-tracker"
   },
-  "test": {
-    "username": "postgres",
-    "password": "sudeep",
-    "database": "expense-tracker",
-    "host": "localhost",
-    "dialect": "postgres"
-  },
   "production": {
     "username": "postgres",
     "password": "sudeep",
