@@ -216,8 +216,6 @@ const forgetPasswordMailController = async (req: Request, res: Response) => {
         });
     }
 };
-
-
 const forgetPasswordHandler = async (req: Request, res: Response) => {
     try {
         let { otp , password, confirmPassword , email } = req.body;
