@@ -32,7 +32,6 @@ const sendOTPAndCacheUserData = async (req: Request, res: Response) => {
         if (password !== confirmPassword) return res.status(401).json({ success : false, error: "Passwords must be same" });
 
         const otp: string = otpGenerator.generate(5, { upperCaseAlphabets: false, specialChars: false });
-
         // const userData = { fullName, email, password };
         // // save OTP in node-cache
         // otpCache.set(email, otp);
@@ -152,8 +151,6 @@ const loginUser = async (req: Request, res: Response) => {
         });
     }
 }
-
-
 
 // <------------------- User profile ----------------------------------->
 export const userProfile = async (req: Request, res: Response) => {
