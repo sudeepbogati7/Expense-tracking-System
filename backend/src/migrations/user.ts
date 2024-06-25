@@ -14,7 +14,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          len: [5, 50], // Assuming you want to enforce this validation through the migration
+          len: [5, 50], 
         },
       },
       email: {
@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
         unique: true,
         validate: {
-          isEmail: true, // Assuming you want to enforce this validation through the migration
+          isEmail: true, 
         },
       },
       password: {
