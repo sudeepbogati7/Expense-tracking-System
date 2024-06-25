@@ -1,8 +1,7 @@
 'use strict';
-
 const { QueryInterface, DataTypes } = require('sequelize');
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: (queryInterface : any, Sequelize : any) => {
     return queryInterface.createTable('users', {
       userId: {
         allowNull: false,
