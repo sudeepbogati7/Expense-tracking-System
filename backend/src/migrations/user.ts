@@ -52,7 +52,7 @@ module.exports = {
     });
   },
 
-  down: (queryInterface , Sequelize) => {
+  down: (queryInterface  : any, Sequelize : any) => {
     return queryInterface.dropTable('users');
   },
 };
