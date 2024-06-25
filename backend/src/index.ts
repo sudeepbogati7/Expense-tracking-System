@@ -32,8 +32,6 @@ app.use(cors({
 
 app.use(cookieParser());
 
-
-// error handling mechanisms 
 require('./utils/handleErrors')();
 
 // routes 
@@ -45,8 +43,6 @@ app.use('/api/expenses', expenseRoutes);
 
 require('./utils/envVariables')();
 
-
-
 sequelize.sync()
   .then(() => {
     console.log("Synchronized successfull..............")
@@ -54,7 +50,6 @@ sequelize.sync()
       console.log("Server is running on port %d", PORT);
     })
   })
-
   .catch(err => {
     console.log("Failed to sync to database : ", err);
   });
