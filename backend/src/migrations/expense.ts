@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          len: [2, 50], // Assuming you want to enforce this validation through the migration
+          len: [2, 50],
         },
       },
       amount: {
@@ -33,7 +33,6 @@ module.exports = {
       },
     });
   },
-
   down: (queryInterface : any, Sequelize : any) => {
     return queryInterface.dropTable('expenses');
   },
