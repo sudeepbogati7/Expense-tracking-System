@@ -1,4 +1,3 @@
-
 module.exports = {
   up: (queryInterface : any, Sequelize:any) => {
     return queryInterface.createTable('expenses', {
@@ -27,7 +26,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users', // Assuming your User model table name is 'users'
+          model: 'users',
           key: 'userId',
         },
       },
