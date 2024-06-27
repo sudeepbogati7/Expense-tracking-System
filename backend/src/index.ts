@@ -10,8 +10,7 @@ import cookieParser from 'cookie-parser';
 app.use(bodyParser.json());
 app.use(Express.json());
 app.use(cors({
-    origin: 'http://localhost:3000, https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app/'
-
+    origin: 'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app/'
 }));
 
 
