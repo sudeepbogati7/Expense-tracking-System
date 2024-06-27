@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-
 export const otpMailAfterRegister = (email: string, name: string, res: Response, otp: string) => {
     const mailOptions = {
         from: process.env.EMAIL_NAME,
