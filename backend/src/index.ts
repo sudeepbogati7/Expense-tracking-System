@@ -9,11 +9,27 @@ import cookieParser from 'cookie-parser';
 // middlewares
 app.use(bodyParser.json());
 app.use(Express.json());
-app.use(cors({
-    origin: 'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app/',
-    optionsSuccessStatus: 200
-}));
 
+
+const allowedOrigins = [
+    'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
+    'https://expense-tracker-neon-one.vercel.app'
+  ];
+  
+  app.use(cors({
+    origin: function (origin, callback) {
+      // Check if the incoming origin is in the allowedOrigins array
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    optionsSuccessStatus: 200,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 
 app.use(cookieParser());
 
