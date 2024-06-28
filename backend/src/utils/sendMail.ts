@@ -2,8 +2,7 @@ import nodemailer from 'nodemailer';
 require('dotenv').config();
 import { Response } from 'express';
 const transporter = nodemailer.createTransport({
-    service: 'smtp.gmail.com',
-    host: 'gmail',
+    service: 'gmail',
     secure: true,
     port: 587,
     auth: {
@@ -18,13 +17,13 @@ export const otpMailAfterRegister = (email: string, name: string, res: Response,
         to: email,
         subject: 'Verify OPT for registration ',
         html: `
-            <p>Dear ${name}</p> <br>
-            <p>Please verify the OTP for registration.</p><br>
-            <p>Your OTP: <strong> ${otp} </strong> </p> <br>
+            <b>Dear ${name}</b> <br>
+            <div>Please verify the OTP for registration.</div><br>
+            <div>Your OTP: <strong> ${otp} </strong> </div> <br>
 
             <span> Best regards </span> <br>
             <span> Sudeep Bogati</span> <br>
-            <a href="https://github.com/sudeepbogati7" > Follow me </a> ?
+            <a href="https://github.com/sudeepbogati7" > Follow me </a>
         `
     };
     try {
