@@ -7,8 +7,8 @@ const transporter = nodemailer.createTransport({
     secure: true,
     port: 587,
     auth: {
-        user: process.env.EMAIL_NAME,
-        pass: process.env.EMAIL_PASS
+        user: 'deepfusionlabs080@gmail.com',
+        pass: 'oekekpdpykzdqgcb'
     }
 });
 
