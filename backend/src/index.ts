@@ -10,26 +10,25 @@ import cookieParser from 'cookie-parser';
 app.use(bodyParser.json());
 app.use(Express.json());
 
-
 const allowedOrigins = [
-    'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
-    'https://expense-tracker-neon-one.vercel.app'
-  ];
-  
-  app.use(cors({
-    origin: function (origin, callback) {
-      // Check if the incoming origin is in the allowedOrigins array
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    optionsSuccessStatus: 200,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
-  }));
+  'http://localhost:3000',
+  'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
+  'https://expense-tracker-neon-one.vercel.app'
+];
+app.use(cors({
+  origin: function (origin, callback) {
+
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(cookieParser());
 
@@ -49,13 +48,13 @@ require('./utils/envVariables')();
 
 
 sequelize.sync()
-    .then(() => {
-        console.log("Synchronized successfull..............")
-        app.listen(PORT, () => {
-            console.log("Server is running on port %d", PORT);
-        })
+  .then(() => {
+    console.log("Synchronized successfull..............")
+    app.listen(PORT, () => {
+      console.log("Server is running on port %d", PORT);
     })
+  })
 
-    .catch(err => {
-        console.log("Failed to sync to database : ", err);
-    });
+  .catch(err => {
+    console.log("Failed to sync to database : ", err);
+  });
