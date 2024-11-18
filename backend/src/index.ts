@@ -11,6 +11,9 @@ app.use(bodyParser.json());
 app.use(Express.json());
 
 const allowedOrigins = [
+  '*',
+  'http://0.0.0.0:3000',
+  'http://192.168.31.56:3000',
   'http://localhost:3000',
   'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
   'https://expense-tracker-neon-one.vercel.app'
