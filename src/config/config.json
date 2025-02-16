@@ -1,0 +1,17 @@
+{
+  "development": {
+     "dialect": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password":"sudeep",
+    "database": "expense-tracker"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "sudeep",
+    "database": "expense-tracker",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
