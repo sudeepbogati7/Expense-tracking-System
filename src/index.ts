@@ -6,10 +6,8 @@ const PORT = process.env.PORT || 3001;
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-// middlewares
 app.use(bodyParser.json());
 app.use(Express.json());
-
 const allowedOrigins = [
   '*',
   'http://0.0.0.0:3000',
