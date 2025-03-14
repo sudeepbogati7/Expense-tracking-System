@@ -29,7 +29,7 @@ const sequelize = new Sequelize(process.env.DB_URL, {
       ssl: {
         require: true, // Ensure SSL is required
         rejectUnauthorized: false, // Enforce certificate validation
-        ca: fs.readFileSync('/src/config/ca.pem').toString(), // Path to the CA certificate
+        ca: fs.readFileSync(path.join(__dirname, '../config/ca.pem')).toString(), // Path to the CA certificate
       },
     },
     models: [User, Expenses],

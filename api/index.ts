@@ -35,7 +35,7 @@ app.use(cors({
 
 app.use(cookieParser());
 
-require('./utils/handleErrors')();
+require('../src/utils/handleErrors')();
 
 // routes 
 import router from "../src/routes/userRoutes";
@@ -43,13 +43,13 @@ app.use('/api/user', router);
 
 import expenseRoutes from '../src/routes/expenseRoutes'
 app.use('/api/expenses', expenseRoutes);
-
-require('./utils/envVariables')();
-
+const path = require('path');
+require('../src/utils/envVariables')();
 sequelize.sync()
-  .then(() => {
-    console.log("Synchronized successfull..............")
-    app.listen(PORT, () => {
+.then(() => {
+  console.log("Synchronized successfull..............")
+  app.listen(PORT, () => {
+      console.log('CA Path:', path.join(__dirname, '../config/ca.pem'));
       console.log("Server is running on port %d", PORT);
     })
   })
