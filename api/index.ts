@@ -1,18 +1,12 @@
-import sequelize from "../src/config/sequelize";
+import sequelize from "../src//config/sequelize";
 import Express from 'express';
 import bodyParser from "body-parser";
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import router from "../src/routes/userRoutes";
-import expenseRoutes from '../src/routes/expenseRoutes';
-import path from 'path';
-
 const app = Express();
 const PORT = process.env.PORT || 3001;
-
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 app.use(bodyParser.json());
 app.use(Express.json());
-
 const allowedOrigins = [
   '*',
   'http://0.0.0.0:3000',
@@ -24,10 +18,10 @@ const allowedOrigins = [
   'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
   'https://expense-tracker-neon-one.vercel.app'
 ];
-
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -42,18 +36,25 @@ app.use(cors({
 app.use(cookieParser());
 
 require('../src/utils/handleErrors')();
-require('../src/utils/envVariables')();
 
+// routes 
+import router from "../src/routes/userRoutes";
 app.use('/api/user', router);
-app.use('/api/expenses', expenseRoutes);
 
+import expenseRoutes from '../src/routes/expenseRoutes'
+app.use('/api/expenses', expenseRoutes);
+const path = require('path');
+require('../src/utils/envVariables')();
 sequelize.sync()
-  .then(() => {
-    console.log("Synchronized successfully.");
+.then(() => {
+  console.log("Synchronized successfull..............")
+  app.listen(PORT, () => {
+      console.log('CA Path:', path.join(__dirname, '../config/ca.pem'));
+      console.log("Server is running on port %d", PORT);
+    })
   })
   .catch(err => {
-    console.error("Failed to sync database: ", err);
+    console.log("Failed to sync to database : ", err);
   });
 
-// Export the app for Vercel
 export default app;
