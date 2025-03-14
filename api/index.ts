@@ -16,7 +16,8 @@ const allowedOrigins = [
   'http://192.168.1.15:3000',
   'http://localhost:3000',
   'https://expense-tracker-2u19v0qvk-sudeepbogati7s-projects.vercel.app',
-  'https://expense-tracker-neon-one.vercel.app'
+  'https://expense-tracker-neon-one.vercel.app',
+  'https://kharcha.sudipbogati.com.np/',
 ];
 app.use(cors({
   origin: function (origin, callback) {
