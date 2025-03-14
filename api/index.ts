@@ -5,7 +5,6 @@ const app = Express();
 const PORT = process.env.PORT || 3001;
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
 app.use(bodyParser.json());
 app.use(Express.json());
 const allowedOrigins = [

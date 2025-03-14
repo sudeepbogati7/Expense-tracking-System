@@ -21,6 +21,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "glob": "^11.0.1",
+    "inflight": "^1.0.6",
     "joi": "^17.12.3",
     "jsonwebtoken": "^9.0.2",
     "latest": "^0.2.0",
@@ -34,7 +36,8 @@
     "sequelize-cli": "^6.6.2",
     "sequelize-typescript": "^2.1.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
